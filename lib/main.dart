@@ -20,6 +20,7 @@ void main() async {
     ),
   );
 
+  Bloc.observer = AppBlocObserver();
   runApp(GraphQLProvider(
     client: client,
     child: const App(),
