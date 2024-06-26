@@ -1,3 +1,4 @@
+import 'package:coolmovies/src/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -58,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Title'),
+        title: Text(context.l10n.homeScreenTitle),
       ),
       body: SingleChildScrollView(
         child: Padding(
