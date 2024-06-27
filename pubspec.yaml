@@ -20,6 +20,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.18.1
+  equatable: ^2.0.5
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
@@ -28,6 +30,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   build_runner: ^2.4.9
   go_router_builder: ^2.7.0
+  json_serializable: ^6.8.0
 
 flutter:
   uses-material-design: true
