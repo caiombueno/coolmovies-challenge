@@ -1,0 +1,10 @@
+query GetMovieSummaryList {
+  allMovies {
+    nodes {
+      id
+      title
+      imgUrl
+      releaseDate
+    }
+  }
+}

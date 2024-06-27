@@ -1,0 +1,15 @@
+
+type MovieSummary {
+  id: ID!
+  title: String
+  imgUrl: String
+  releaseDate: String
+}
+
+type MovieSummaryConnection {
+  nodes: [MovieSummary!]!
+}
+
+type Query {
+  allMovies: MovieSummaryConnection!
+}
