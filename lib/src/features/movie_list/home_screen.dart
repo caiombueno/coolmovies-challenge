@@ -1,6 +1,5 @@
 import 'package:coolmovies/src/l10n/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,65 +9,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final ValueNotifier<Map<String, dynamic>?> _data = ValueNotifier(null);
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  void _fetchData() async {
-    print('Fetching data...');
-    var client = GraphQLProvider.of(context).value;
-
-    final QueryResult result = await client.query(QueryOptions(
-      document: gql(r"""
-          query AllMovies {
-            allMovies {
-              nodes {
-                id
-                imgUrl
-                movieDirectorId
-                userCreatorId
-                title
-                releaseDate
-                nodeId
-                userByUserCreatorId {
-                  id
-                  name
-                  nodeId
-                }
-              }
-            }
-          }
-        """),
-    ));
-
-    if (result.hasException) {
-      print(result.exception.toString());
-    }
-
-    if (result.data != null) {
-      _data.value = result.data!['allMovies'];
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.homeScreenTitle),
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(top: 36.0),
                   child: Text(
                     """Thank you for taking the time to take our test. We really appreciate it.
@@ -78,38 +32,6 @@ Good luck! :)""",
                     textAlign: TextAlign.center,
                   ),
                 ),
-                const SizedBox(height: 16),
-                TextButton.icon(
-                  onPressed: _incrementCounter,
-                  icon: const Icon(Icons.add),
-                  label: Text('Increment: $_counter'),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.blue,
-                  ),
-                ),
-                OutlinedButton.icon(
-                  onPressed: _fetchData,
-                  icon: const Icon(Icons.download),
-                  label: const Text('Fetch data'),
-                ),
-                const SizedBox(height: 16),
-                ValueListenableBuilder(
-                    valueListenable: _data,
-                    builder: (BuildContext context, Map<String, dynamic>? data,
-                        Widget? _) {
-                      return data != null
-                          ? Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  border: Border.all(
-                                      color: Colors.grey.shade700, width: 1),
-                                  borderRadius: BorderRadius.circular(4)),
-                              child: Text(data.toString()),
-                            )
-                          : Container();
-                    }),
               ],
             ),
           ),

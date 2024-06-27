@@ -1,38 +1,19 @@
 import 'dart:developer';
-import 'dart:io';
 import 'dart:ui';
-
 import 'package:coolmovies/src/app/app.dart';
 import 'package:coolmovies/src/app/app_bloc_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  final HttpLink httpLink = HttpLink(
-    Platform.isAndroid
-        ? 'http://10.0.2.2:5001/graphql'
-        : 'http://localhost:5001/graphql',
-  );
-
-  ValueNotifier<GraphQLClient> client = ValueNotifier(
-    GraphQLClient(
-      link: httpLink,
-      cache: GraphQLCache(store: InMemoryStore()),
-    ),
-  );
 
   Bloc.observer = AppBlocObserver();
 
   // https://docs.flutter.dev/testing/errors
   registerErrorHandlers();
 
-  runApp(GraphQLProvider(
-    client: client,
-    child: const App(),
-  ));
+  runApp(const App());
 }
 
 void registerErrorHandlers() {

@@ -1,4 +1,6 @@
 {
   "@@locale": "en",
-  "homeScreenTitle": "Home Screen"
+  "homeScreenTitle": "Home Screen",
+  "fetchDataFailureExceptionMessage": "Error occurred while communicating with the server.",
+  "noDataFoundExceptionMessage": "No data found."
 }
