@@ -4,20 +4,19 @@ import 'package:coolmovies/src/models/exceptions.dart';
 import 'package:coolmovies/src/models/movie_summary.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:graphql/client.dart';
-
 import 'package:mocktail/mocktail.dart';
-
 import '../../../fakes.dart';
 import '../../../mocks.dart';
+import '../../../utils/utils.dart';
 
 void main() {
   group('MovieDataSource', () {
-    late MovieDataSource dataSource;
-    late MockGraphQLClient mockClient;
+    late final MovieDataSource dataSource;
+    late final GraphQLClient graphQlClient;
 
-    setUp(() {
-      mockClient = MockGraphQLClient();
-      dataSource = MovieDataSource(mockClient);
+    setUpAll(() {
+      graphQlClient = MockGraphQLClient();
+      dataSource = MovieDataSource(graphQlClient);
     });
 
     group('getMovieSummaryList', () {
@@ -54,22 +53,25 @@ void main() {
           registerFallbackValue(FakeQueryOptions<Query$GetMovieSummaryList>()));
 
       Future<QueryResult<Query$GetMovieSummaryList>> getMovieSummariesQuery() =>
-          mockClient.query(any());
+          graphQlClient.query(any());
 
       QueryResult<Query$GetMovieSummaryList> getMockQueryResult(
-        Map<String, dynamic>? data, {
-        bool hasException = false,
-      }) {
+          Map<String, dynamic>? data) {
         final queryResult = MockQueryResult<Query$GetMovieSummaryList>();
 
         when(() => queryResult.data).thenReturn(data);
-        when(() => queryResult.hasException).thenReturn(hasException);
 
         return queryResult;
       }
 
+      void verifySingleCallAndNoMoreInteractions() {
+        verify(getMovieSummariesQuery).called(1);
+        verifyNoMoreInteractions(graphQlClient);
+      }
+
       test('should return movie summaries when response is successful',
           () async {
+        // arrange
         const movieSummary = MovieSummary(
           id: id,
           title: title,
@@ -83,51 +85,60 @@ void main() {
 
         when(getMovieSummariesQuery).thenAnswer((_) async => mockQueryResult);
 
-        final summaries = await dataSource.getMovieSummaryList();
+        // act
+        final summariesEither = await dataSource.getMovieSummaryList();
 
-        expect(summaries, mockMovieSummaries);
+        // assert
+        expectRight<Exception, List<MovieSummary>>(
+          summariesEither,
+          mockMovieSummaries,
+        );
+        verifySingleCallAndNoMoreInteractions();
       });
 
-      test('should throw NoDataFoundException when response is empty',
+      test('should throw EmptyResultException when response is empty',
           () async {
+        // arrange
         final queryResult = getMockQueryResult({});
 
         when(getMovieSummariesQuery).thenAnswer((_) async => queryResult);
 
-        expect(
-          dataSource.getMovieSummaryList,
-          throwsA(isA<NoDataFoundException>()),
-        );
+        // act
+        final summariesEither = await dataSource.getMovieSummaryList();
+
+        // assert
+        expectLeft<Exception, List<MovieSummary>, EmptyResultException>(
+            summariesEither);
+        verifySingleCallAndNoMoreInteractions();
       });
 
-      test('should throw NoDataFoundException when response is null', () async {
+      test('should throw EmptyResultException when response is null', () async {
+        // arrange
         final queryResult = getMockQueryResult(null);
 
         when(getMovieSummariesQuery).thenAnswer((_) async => queryResult);
 
-        expect(
-          dataSource.getMovieSummaryList,
-          throwsA(isA<NoDataFoundException>()),
-        );
+        // act
+        final summariesEither = await dataSource.getMovieSummaryList();
+
+        // assert
+        expectLeft<Exception, List<MovieSummary>, EmptyResultException>(
+            summariesEither);
+        verifySingleCallAndNoMoreInteractions();
       });
 
-      test('should throw exception when there is a query error', () async {
-        when(getMovieSummariesQuery).thenThrow(OperationException());
-
-        expect(
-            dataSource.getMovieSummaryList, throwsA(isA<OperationException>()));
-      });
-
-      test('should throw FetchDataFailureException when response has exception',
+      test('should throw QueryFailureException when there is a query error',
           () async {
-        final queryResult = getMockQueryResult(null, hasException: true);
+        // arrange
+        when(getMovieSummariesQuery).thenThrow(Exception());
 
-        when(getMovieSummariesQuery).thenAnswer((_) async => queryResult);
+        // act
+        final summariesEither = await dataSource.getMovieSummaryList();
 
-        expect(
-          dataSource.getMovieSummaryList,
-          throwsA(isA<FetchDataFailureException>()),
-        );
+        // assert
+        expectLeft<Exception, List<MovieSummary>, QueryFailureException>(
+            summariesEither);
+        verifySingleCallAndNoMoreInteractions();
       });
     });
   });
