@@ -5,13 +5,13 @@ import 'package:coolmovies/src/models/movie_summary.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
+import 'package:injectable/injectable.dart';
 
+@lazySingleton
 class MovieDataSource {
   late final GraphQLClient _client;
 
-  MovieDataSource(
-    @visibleForTesting GraphQLClient? client,
-  ) {
+  MovieDataSource(@visibleForTesting GraphQLClient? client) {
     final httpLink = HttpLink(
       Platform.isAndroid
           ? 'http://10.0.2.2:5001/graphql'

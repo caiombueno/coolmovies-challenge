@@ -2,17 +2,18 @@ import 'dart:developer';
 import 'dart:ui';
 import 'package:coolmovies/src/app/app.dart';
 import 'package:coolmovies/src/app/app_bloc_observer.dart';
+import 'package:coolmovies/src/service_location.dart' as sl;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  sl.configureDependencies();
 
   Bloc.observer = AppBlocObserver();
 
   // https://docs.flutter.dev/testing/errors
   registerErrorHandlers();
-
   runApp(const App());
 }
 
