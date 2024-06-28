@@ -253,9 +253,7 @@ class Options$Query$GetMovieSummaryList
               ? null
               : (data) => onComplete(
                     data,
-                    data == null
-                        ? null
-                        : _parserFn$Query$GetMovieSummaryList(data),
+                    _parserFn$Query$GetMovieSummaryList(data),
                   ),
           onError: onError,
           document: documentNodeQueryGetMovieSummaryList,
