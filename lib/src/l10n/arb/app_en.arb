@@ -1,6 +1,9 @@
 {
   "@@locale": "en",
   "homeScreenTitle": "Home Screen",
-  "fetchDataFailureExceptionMessage": "Error occurred while communicating with the server.",
-  "noDataFoundExceptionMessage": "No data found."
+  "queryFailureExceptionMessage": "Error occurred while communicating with the server.",
+  "emptyResultExceptionMessage": "No data found.",
+  "dataFormatFailureExceptionMessage": "Error occurred while processing the data.",
+  "noMoviesFoundExceptionMessage": "No movies found.",
+  "moviesFetchFailureExceptionMessage": "Failed to fetch movies."
 }
