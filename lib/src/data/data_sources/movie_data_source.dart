@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:coolmovies/src/data/data_sources/operations/operations.dart';
 import 'package:coolmovies/src/models/exceptions.dart';
 import 'package:coolmovies/src/models/movie_summary.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:graphql/client.dart';
 import 'package:injectable/injectable.dart';
@@ -12,24 +10,29 @@ import 'package:injectable/injectable.dart';
 class MovieDataSource {
   late final GraphQLClient _client;
 
-  MovieDataSource(@visibleForTesting GraphQLClient? client) {
+  MovieDataSource() {
     final httpLink = HttpLink(
       Platform.isAndroid
           ? 'http://10.0.2.2:5001/graphql'
           : 'http://localhost:5001/graphql',
     );
-    _client = client ??
-        GraphQLClient(
-          link: httpLink,
-          cache: GraphQLCache(store: InMemoryStore()),
-        );
+    _client = GraphQLClient(
+      link: httpLink,
+      cache: GraphQLCache(store: InMemoryStore()),
+    );
   }
+
+  // This is only used for testing purposes.
+  // Injectable will try to inject a GraphQLClient singleton if parameters are used in the constructor.
+  MovieDataSource.forTesting(GraphQLClient client) : _client = client;
 
   Future<Either<Exception, List<MovieSummary>>> getMovieSummaryList() async {
     try {
       final result = await _client
           .query$GetMovieSummaryList(Options$Query$GetMovieSummaryList())
           .onError((_, __) => throw const QueryFailureException());
+
+      if (result.hasException) throw const QueryFailureException();
 
       final data = result.data;
 

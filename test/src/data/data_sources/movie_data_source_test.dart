@@ -16,7 +16,7 @@ void main() {
 
     setUpAll(() {
       graphQlClient = MockGraphQLClient();
-      dataSource = MovieDataSource(graphQlClient);
+      dataSource = MovieDataSource.forTesting(graphQlClient);
     });
 
     group('getMovieSummaryList', () {
@@ -56,10 +56,13 @@ void main() {
           graphQlClient.query(any());
 
       QueryResult<Query$GetMovieSummaryList> getMockQueryResult(
-          Map<String, dynamic>? data) {
+        Map<String, dynamic>? data, {
+        bool hasException = false,
+      }) {
         final queryResult = MockQueryResult<Query$GetMovieSummaryList>();
 
         when(() => queryResult.data).thenReturn(data);
+        when(() => queryResult.hasException).thenReturn(hasException);
 
         return queryResult;
       }
@@ -131,6 +134,22 @@ void main() {
           () async {
         // arrange
         when(getMovieSummariesQuery).thenThrow(Exception());
+
+        // act
+        final summariesEither = await dataSource.getMovieSummaryList();
+
+        // assert
+        expectLeft<Exception, List<MovieSummary>, QueryFailureException>(
+            summariesEither);
+        verifySingleCallAndNoMoreInteractions();
+      });
+
+      test('should throw QueryFailureException when hasException is true',
+          () async {
+        // arrange
+        final queryResult = getMockQueryResult(resultData, hasException: true);
+
+        when(getMovieSummariesQuery).thenAnswer((_) async => queryResult);
 
         // act
         final summariesEither = await dataSource.getMovieSummaryList();
