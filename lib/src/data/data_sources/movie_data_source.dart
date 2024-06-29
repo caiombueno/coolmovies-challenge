@@ -59,20 +59,40 @@ class _MovieDataSourceParser {
       () {
         final parsedData = Query$GetMovieSummaryList.fromJson(data);
 
-        final List<MovieSummary> movieSummaries = parsedData.allMovies.nodes
-            .map(
-              (e) => MovieSummary(
-                id: e.id,
-                title: e.title,
-                imgUrl: e.imgUrl,
-                releaseDate: e.releaseDate,
-              ),
-            )
-            .toList();
+        final List<MovieSummary> movieSummaries =
+            parsedData.allMovies.nodes.map((e) {
+          final ratingList =
+              _getRatingListFromMovieSummaryList(e.movieReviewsByMovieId);
+
+          return MovieSummary.fromRatingList(
+            id: e.id,
+            title: e.title,
+            imgUrl: e.imgUrl,
+            ratingList: ratingList,
+          );
+        }).toList();
 
         return movieSummaries;
       },
       (_, __) => const DataFormatFailureException(),
     );
+  }
+
+  static List<double> _getRatingListFromMovieSummaryList(
+      Query$GetMovieSummaryList$allMovies$nodes$movieReviewsByMovieId?
+          ratingList) {
+    if (ratingList == null) return [];
+    final nodes = ratingList.nodes;
+
+    final List<double> ratings =
+        nodes.map((e) => e.rating).toNonNullable().toList();
+
+    return ratings;
+  }
+}
+
+extension NonNullableIterable<E> on Iterable<E?> {
+  Iterable<E> toNonNullable() {
+    return where((element) => element != null).cast<E>();
   }
 }

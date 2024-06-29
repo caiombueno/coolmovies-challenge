@@ -23,30 +23,37 @@ void main() {
       const id = '1';
       const title = 'Movie 1';
       const imgUrl = 'img1.png';
-      const releaseDate = '2023-01-01';
+      const ratingList = [4, 5];
+      const overallRating = 4.5;
+
       const typename = 'MovieSummary';
 
-      final resultData = {
-        "allMovies": {
-          "__typename": "MovieConnection",
+      final node = {
+        "__typename": typename,
+        "id": id,
+        "title": title,
+        "imgUrl": imgUrl,
+        "movieReviewsByMovieId": {
+          "__typename": "MovieReviewConnection",
           "nodes": [
             {
-              "id": id,
-              "title": title,
-              "imgUrl": imgUrl,
-              "releaseDate": releaseDate,
-              "__typename": typename
+              "__typename": "MovieReview",
+              "rating": ratingList.first,
             },
             {
-              "id": id,
-              "title": title,
-              "imgUrl": imgUrl,
-              "releaseDate": releaseDate,
-              "__typename": typename
-            },
+              "__typename": "MovieReview",
+              "rating": ratingList.last,
+            }
           ]
-        },
-        "__typename": "Query"
+        }
+      };
+
+      final resultData = {
+        "__typename": "Query",
+        "allMovies": {
+          "__typename": "MovieConnection",
+          "nodes": [node, node],
+        }
       };
 
       setUpAll(() =>
@@ -79,7 +86,7 @@ void main() {
           id: id,
           title: title,
           imgUrl: imgUrl,
-          releaseDate: releaseDate,
+          overallRating: overallRating,
         );
 
         final mockMovieSummaries = [movieSummary, movieSummary];

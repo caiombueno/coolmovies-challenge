@@ -1,24 +1,40 @@
 import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
-part 'movie_summary.g.dart';
 
-@JsonSerializable()
 class MovieSummary extends Equatable {
   final String id;
-  final String? title, imgUrl, releaseDate;
+  final String? title, imgUrl;
+  final double overallRating;
 
   const MovieSummary({
     required this.id,
     this.title,
     this.imgUrl,
-    this.releaseDate,
+    this.overallRating = 0,
   });
 
-  factory MovieSummary.fromJson(Map<String, dynamic> json) =>
-      _$MovieSummaryFromJson(json);
-
-  Map<String, dynamic> toJson() => _$MovieSummaryToJson(this);
+  factory MovieSummary.fromRatingList({
+    required String id,
+    String? title,
+    String? imgUrl,
+    required List<double> ratingList,
+  }) {
+    final overallRating = ratingList.mean ?? 0;
+    return MovieSummary(
+      id: id,
+      title: title,
+      imgUrl: imgUrl,
+      overallRating: overallRating,
+    );
+  }
 
   @override
-  List<String?> get props => [id, title, imgUrl, releaseDate];
+  List<Object?> get props => [id, title, imgUrl, overallRating];
+}
+
+extension on Iterable<double> {
+  double? get mean {
+    if (isEmpty) return null;
+
+    return reduce((a, b) => a + b) / length;
+  }
 }

@@ -6,40 +6,8 @@ void main() {
     const id = '1';
     const title = 'Inception';
     const imgUrl = 'https://example.com/inception.jpg';
-    const releaseDate = '2010-07-16';
-    group('fromJson/toJson', () {
-      test('should deserialize from JSON', () {
-        final json = {
-          'id': id,
-          'title': title,
-          'imgUrl': imgUrl,
-          'releaseDate': releaseDate
-        };
-
-        final movie = MovieSummary.fromJson(json);
-
-        expect(movie.id, id);
-        expect(movie.title, title);
-        expect(movie.imgUrl, imgUrl);
-        expect(movie.releaseDate, releaseDate);
-      });
-
-      test('should serialize to JSON', () {
-        const movie = MovieSummary(
-          id: id,
-          title: title,
-          imgUrl: imgUrl,
-          releaseDate: releaseDate,
-        );
-
-        final json = movie.toJson();
-
-        expect(json['id'], id);
-        expect(json['title'], title);
-        expect(json['imgUrl'], imgUrl);
-        expect(json['releaseDate'], releaseDate);
-      });
-    });
+    const ratingList = [5.0, 4.0];
+    const overallRating = 4.5;
 
     group('Equatable', () {
       test('props should return a list of properties', () {
@@ -47,10 +15,10 @@ void main() {
           id: id,
           title: title,
           imgUrl: imgUrl,
-          releaseDate: releaseDate,
+          overallRating: overallRating,
         );
 
-        expect(movie.props, [id, title, imgUrl, releaseDate]);
+        expect(movie.props, [id, title, imgUrl, overallRating]);
       });
 
       test('should be equal if all properties are equal', () {
@@ -58,13 +26,13 @@ void main() {
           id: id,
           title: title,
           imgUrl: imgUrl,
-          releaseDate: releaseDate,
+          overallRating: overallRating,
         );
         const movie2 = MovieSummary(
           id: id,
           title: title,
           imgUrl: imgUrl,
-          releaseDate: releaseDate,
+          overallRating: overallRating,
         );
 
         expect(movie1, movie2);
@@ -75,16 +43,47 @@ void main() {
           id: id,
           title: title,
           imgUrl: imgUrl,
-          releaseDate: releaseDate,
+          overallRating: overallRating,
         );
         const movie2 = MovieSummary(
           id: '2',
           title: title,
           imgUrl: imgUrl,
-          releaseDate: releaseDate,
+          overallRating: overallRating,
         );
 
         expect(movie1 != movie2, true);
+      });
+    });
+
+    group('fromRatingList', () {
+      test('should calculate the overallRating correctly', () {
+        // act
+        final movieSummary = MovieSummary.fromRatingList(
+          id: id,
+          title: title,
+          imgUrl: imgUrl,
+          ratingList: ratingList,
+        );
+
+        // assert
+        expect(movieSummary.overallRating, overallRating);
+      });
+
+      test('overallRating should be equals zero when ratingList is empty', () {
+        // arrange
+        final ratingList = <double>[];
+
+        // act
+        final movieSummary = MovieSummary.fromRatingList(
+          id: id,
+          title: title,
+          imgUrl: imgUrl,
+          ratingList: ratingList,
+        );
+
+        // assert
+        expect(movieSummary.overallRating, 0.0);
       });
     });
   });

@@ -1,9 +1,16 @@
-
 type MovieSummary {
   id: ID!
   title: String
   imgUrl: String
-  releaseDate: String
+  movieReviewsByMovieId: MovieReviewConnection
+}
+
+type MovieReview {
+  rating: Float
+}
+
+type MovieReviewConnection {
+  nodes: [MovieReview!]!
 }
 
 type MovieSummaryConnection {
