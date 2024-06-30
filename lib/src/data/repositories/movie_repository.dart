@@ -16,9 +16,28 @@ class MovieRepository {
         DataException exception;
 
         if (l is EmptyResultException) {
-          exception = const NoMoviesFoundException();
+          exception = const NoMovieSummaryListFoundException();
         } else {
-          exception = const MoviesFetchFailureException();
+          exception = const MovieSummaryListFetchFailureException();
+        }
+
+        return Left(exception);
+      },
+      (r) => Right(r),
+    );
+  }
+
+  Future<Either<DataException, MovieDetails>> getMovieDetails(
+      {required String movieId}) async {
+    final result = await _movieDataSource.getMovieDetails(movieId: movieId);
+    return result.fold(
+      (l) {
+        DataException exception;
+
+        if (l is EmptyResultException) {
+          exception = const NoMovieDetailsFoundException();
+        } else {
+          exception = const MovieDetailsFetchFailureException();
         }
 
         return Left(exception);

@@ -37,18 +37,37 @@ class DataFormatFailureException extends DataException {
       context.l10n.dataFormatFailureExceptionMessage;
 }
 
-class NoMoviesFoundException extends DataException {
-  const NoMoviesFoundException() : super('no-movies-found');
+class NoMovieSummaryListFoundException extends DataException {
+  const NoMovieSummaryListFoundException()
+      : super('no-movie-summary-list-found');
 
   @override
   String getMessage(BuildContext context) =>
-      context.l10n.noMoviesFoundExceptionMessage;
+      context.l10n.noMovieSummaryListFoundExceptionMessage;
 }
 
-class MoviesFetchFailureException extends DataException {
-  const MoviesFetchFailureException() : super('movies-fetch-failure');
+class MovieSummaryListFetchFailureException extends DataException {
+  const MovieSummaryListFetchFailureException()
+      : super('movie-summary-list-fetch-failure');
 
   @override
   String getMessage(BuildContext context) =>
-      context.l10n.moviesFetchFailureExceptionMessage;
+      context.l10n.movieSummaryListFetchFailureExceptionMessage;
+}
+
+class NoMovieDetailsFoundException extends DataException {
+  const NoMovieDetailsFoundException() : super('no-movie-details-found');
+
+  @override
+  String getMessage(BuildContext context) =>
+      context.l10n.noMovieDetailsFoundExceptionMessage;
+}
+
+class MovieDetailsFetchFailureException extends DataException {
+  const MovieDetailsFetchFailureException()
+      : super('movie-details-fetch-failure');
+
+  @override
+  String getMessage(BuildContext context) =>
+      context.l10n.movieDetailsFetchFailureExceptionMessage;
 }

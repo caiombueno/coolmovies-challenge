@@ -4,6 +4,8 @@
   "queryFailureExceptionMessage": "Error occurred while communicating with the server.",
   "emptyResultExceptionMessage": "No data found.",
   "dataFormatFailureExceptionMessage": "Error occurred while processing the data.",
-  "noMoviesFoundExceptionMessage": "No movies found.",
-  "moviesFetchFailureExceptionMessage": "Failed to fetch movies."
+  "noMovieSummaryListFoundExceptionMessage": "No movies found.",
+  "movieSummaryListFetchFailureExceptionMessage": "Failed to fetch movies.",
+  "noMovieDetailsFoundExceptionMessage": "Couldn't find details about the movie.",
+  "movieDetailsFetchFailureExceptionMessage": "Failed to fetch details about the movie."
 }
