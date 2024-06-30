@@ -1,4 +1,4 @@
-import 'package:coolmovies/src/features/movie_list/home_screen.dart';
+import 'package:coolmovies/src/features/movie_list/view/view.dart';
 import 'package:coolmovies/src/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 

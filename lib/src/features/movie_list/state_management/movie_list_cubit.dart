@@ -3,10 +3,8 @@ import 'package:coolmovies/src/models/exceptions.dart';
 import 'package:coolmovies/src/models/movie_summary.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:injectable/injectable.dart';
 part 'movie_list_state.dart';
 
-@lazySingleton
 class MovieListCubit extends Cubit<MovieListState> {
   final MovieRepository _movieRepository;
 
@@ -21,8 +19,4 @@ class MovieListCubit extends Cubit<MovieListState> {
       ),
     );
   }
-
-  @disposeMethod
-  @override
-  Future<void> close() => super.close();
 }
