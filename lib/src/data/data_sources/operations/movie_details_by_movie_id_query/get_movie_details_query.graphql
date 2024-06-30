@@ -1,0 +1,24 @@
+query GetMovieDetails($id: UUID!) {
+    movieById(id: $id) {
+      id
+			title
+      releaseDate
+			imgUrl
+      movieDirectorByMovieDirectorId {
+				id
+				name
+      }
+			movieReviewsByMovieId {
+				nodes {
+					id
+					title
+					body
+					rating
+					userByUserReviewerId {
+						id
+						name
+					}
+				}
+			}
+    }
+}

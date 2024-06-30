@@ -1,16 +1,39 @@
+type Movie {
+  id: ID!
+  title: String
+  releaseDate: String
+  imgUrl: String
+  movieDirectorByMovieDirectorId: MovieDirector
+  movieReviewsByMovieId: MovieReviewConnection
+}
+
+type MovieDirector {
+  id: ID!
+  name: String
+}
+
+type MovieReview {
+  id: ID!
+  title: String
+  body: String
+  rating: Float
+  userByUserReviewerId: User
+}
+
+type User {
+  id: ID!
+  name: String
+}
+
+type MovieReviewConnection {
+  nodes: [MovieReview!]!
+}
+
 type MovieSummary {
   id: ID!
   title: String
   imgUrl: String
   movieReviewsByMovieId: MovieReviewConnection
-}
-
-type MovieReview {
-  rating: Float
-}
-
-type MovieReviewConnection {
-  nodes: [MovieReview!]!
 }
 
 type MovieSummaryConnection {
@@ -19,4 +42,7 @@ type MovieSummaryConnection {
 
 type Query {
   allMovies: MovieSummaryConnection!
+  movieById(id: UUID!): Movie
 }
+
+scalar UUID
