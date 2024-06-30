@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:coolmovies/src/data/data_sources/operations/operations.dart';
-import 'package:coolmovies/src/models/exceptions.dart';
-import 'package:coolmovies/src/models/movie_summary.dart';
+import 'package:coolmovies/src/models/models.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:graphql/client.dart';
 import 'package:injectable/injectable.dart';
@@ -50,6 +49,35 @@ class MovieDataSource {
       return Either.left(Exception(e.toString()));
     }
   }
+
+  Future<Either<Exception, MovieDetails>> getMovieDetails(
+      {required String movieId}) async {
+    try {
+      final result = await _client
+          .query$GetMovieDetails(
+            Options$Query$GetMovieDetails(
+                variables: Variables$Query$GetMovieDetails(id: movieId)),
+          )
+          .onError((_, __) => throw const QueryFailureException());
+
+      if (result.hasException) throw const QueryFailureException();
+
+      final data = result.data;
+
+      if (data == null || data.isEmpty) throw const EmptyResultException();
+
+      final movieDetails = _MovieDataSourceParser.parseMovieDetails(data);
+
+      return movieDetails.fold(
+        (exception) => throw exception,
+        (movieDetails) => Either.right(movieDetails),
+      );
+    } on AppException catch (e) {
+      return Either.left(e);
+    } catch (e) {
+      return Either.left(Exception(e.toString()));
+    }
+  }
 }
 
 class _MovieDataSourceParser {
@@ -78,6 +106,37 @@ class _MovieDataSourceParser {
     );
   }
 
+  static Either<DataFormatFailureException, MovieDetails> parseMovieDetails(
+      Map<String, dynamic> data) {
+    return Either.tryCatch(
+      () {
+        final parsedData = Query$GetMovieDetails.fromJson(data).movieById;
+        if (parsedData == null) throw const DataFormatFailureException();
+
+        final reviews = _getMovieReviewListFromMovieDetails(
+            parsedData.movieReviewsByMovieId);
+
+        final directorData = parsedData.movieDirectorByMovieDirectorId;
+        final directorId = directorData?.id;
+        final director = (directorId != null)
+            ? MovieDirector(directorId: directorId, name: directorData?.name)
+            : null;
+
+        final MovieDetails movieDetails = MovieDetails(
+          movieId: parsedData.id,
+          title: parsedData.title,
+          imgUrl: parsedData.imgUrl,
+          releaseDate: parsedData.releaseDate,
+          reviews: reviews,
+          director: director,
+        );
+
+        return movieDetails;
+      },
+      (_, __) => const DataFormatFailureException(),
+    );
+  }
+
   static List<double> _getRatingListFromMovieSummaryList(
       Query$GetMovieSummaryList$allMovies$nodes$movieReviewsByMovieId?
           ratingList) {
@@ -88,6 +147,27 @@ class _MovieDataSourceParser {
         nodes.map((e) => e.rating).toNonNullable().toList();
 
     return ratings;
+  }
+
+  static List<MovieReview> _getMovieReviewListFromMovieDetails(
+      Query$GetMovieDetails$movieById$movieReviewsByMovieId? reviewList) {
+    if (reviewList == null) return [];
+
+    final reviews = reviewList.nodes.map((e) {
+      final reviewer = e.userByUserReviewerId;
+      final reviewerId = reviewer?.id;
+      return MovieReview(
+        reviewId: e.id,
+        title: e.title,
+        body: e.body,
+        rating: e.rating,
+        reviewer: (reviewerId != null)
+            ? User(userId: reviewerId, name: reviewer?.name)
+            : null,
+      );
+    }).toList();
+
+    return reviews;
   }
 }
 
