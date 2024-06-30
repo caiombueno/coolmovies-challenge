@@ -1,2 +1,3 @@
 export 'exceptions.dart';
-export 'movie_summary.dart';
+export 'movie/movie.dart';
+export 'user.dart';

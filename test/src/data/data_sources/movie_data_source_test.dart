@@ -1,7 +1,5 @@
-import 'package:coolmovies/src/data/data_sources/movie_data_source.dart';
-import 'package:coolmovies/src/data/data_sources/operations/operations.dart';
-import 'package:coolmovies/src/models/exceptions.dart';
-import 'package:coolmovies/src/models/movie_summary.dart';
+import 'package:coolmovies/src/data/data_sources/data_sources.dart';
+import 'package:coolmovies/src/models/models.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:graphql/client.dart';
 import 'package:mocktail/mocktail.dart';
@@ -18,6 +16,26 @@ void main() {
       graphQlClient = MockGraphQLClient();
       dataSource = MovieDataSource.forTesting(graphQlClient);
     });
+
+    Future<QueryResult<Q>> makeQuery<Q>() => graphQlClient.query(any());
+
+    QueryResult<Q> getMockQueryResultOfType<Q>(
+      Map<String, dynamic>? data, {
+      bool hasException = false,
+    }) {
+      final queryResult = MockQueryResult<Q>();
+
+      when(() => queryResult.data).thenReturn(data);
+      when(() => queryResult.hasException).thenReturn(hasException);
+
+      return queryResult;
+    }
+
+    void verifySingleCallAndNoMoreInteractionsToQuery(
+        Future<QueryResult> Function() query) {
+      verify(query).called(1);
+      verifyNoMoreInteractions(graphQlClient);
+    }
 
     group('getMovieSummaryList', () {
       const id = '1';
@@ -60,24 +78,19 @@ void main() {
           registerFallbackValue(FakeQueryOptions<Query$GetMovieSummaryList>()));
 
       Future<QueryResult<Query$GetMovieSummaryList>> getMovieSummariesQuery() =>
-          graphQlClient.query(any());
+          makeQuery<Query$GetMovieSummaryList>();
 
       QueryResult<Query$GetMovieSummaryList> getMockQueryResult(
         Map<String, dynamic>? data, {
         bool hasException = false,
-      }) {
-        final queryResult = MockQueryResult<Query$GetMovieSummaryList>();
+      }) =>
+          getMockQueryResultOfType<Query$GetMovieSummaryList>(
+            data,
+            hasException: hasException,
+          );
 
-        when(() => queryResult.data).thenReturn(data);
-        when(() => queryResult.hasException).thenReturn(hasException);
-
-        return queryResult;
-      }
-
-      void verifySingleCallAndNoMoreInteractions() {
-        verify(getMovieSummariesQuery).called(1);
-        verifyNoMoreInteractions(graphQlClient);
-      }
+      void verifySingleCallAndNoMoreInteractions() =>
+          verifySingleCallAndNoMoreInteractionsToQuery(getMovieSummariesQuery);
 
       test('should return movie summaries when response is successful',
           () async {
@@ -164,6 +177,143 @@ void main() {
         // assert
         expectLeft<Exception, List<MovieSummary>, QueryFailureException>(
             summariesEither);
+        verifySingleCallAndNoMoreInteractions();
+      });
+    });
+
+    group('getMovieDetails', () {
+      const movieDetails = MovieDetails(
+        movieId: '1',
+        title: 'Movie 1',
+        imgUrl: 'img1.png',
+        releaseDate: '2021-01-01',
+        reviews: [MovieReview(reviewId: '1')],
+        director: MovieDirector(directorId: '1', name: 'Director 1'),
+      );
+
+      final jsonData = {
+        "__typename": "Query",
+        "movieById": {
+          "__typename": "Movie",
+          "id": movieDetails.movieId,
+          "title": movieDetails.title,
+          "releaseDate": movieDetails.releaseDate,
+          "imgUrl": movieDetails.imgUrl,
+          "movieDirectorByMovieDirectorId": {
+            "__typename": "MovieDirector",
+            "id": movieDetails.director?.directorId,
+            "name": movieDetails.director?.name,
+          },
+          "movieReviewsByMovieId": {
+            "__typename": "MovieReviewConnection",
+            "nodes": [
+              {
+                "__typename": "MovieReview",
+                "id": movieDetails.reviews.first.reviewId,
+              }
+            ]
+          }
+        }
+      };
+
+      setUpAll(() =>
+          registerFallbackValue(FakeQueryOptions<Query$GetMovieDetails>()));
+
+      Future<QueryResult<Query$GetMovieDetails>> getMovieDetailsQuery() =>
+          makeQuery<Query$GetMovieDetails>();
+
+      QueryResult<Query$GetMovieDetails> getMockQueryResult(
+        Map<String, dynamic>? data, {
+        bool hasException = false,
+      }) =>
+          getMockQueryResultOfType<Query$GetMovieDetails>(
+            data,
+            hasException: hasException,
+          );
+
+      void verifySingleCallAndNoMoreInteractions() =>
+          verifySingleCallAndNoMoreInteractionsToQuery(getMovieDetailsQuery);
+
+      test('should return movie details when response is successful', () async {
+        // arrange
+        final queryResult = getMockQueryResult(jsonData);
+
+        when(getMovieDetailsQuery).thenAnswer((_) async => queryResult);
+
+        // act
+        final movieDetailsEither =
+            await dataSource.getMovieDetails(movieId: movieDetails.movieId);
+
+        // assert
+        expectRight<Exception, MovieDetails>(
+          movieDetailsEither,
+          movieDetails,
+        );
+        verifySingleCallAndNoMoreInteractions();
+      });
+
+      test('should throw EmptyResultException when response is empty',
+          () async {
+        // arrange
+        final queryResult = getMockQueryResult({});
+
+        when(getMovieDetailsQuery).thenAnswer((_) async => queryResult);
+
+        // act
+        final movieDetailsEither =
+            await dataSource.getMovieDetails(movieId: '');
+
+        // assert
+        expectLeft<Exception, MovieDetails, EmptyResultException>(
+            movieDetailsEither);
+        verifySingleCallAndNoMoreInteractions();
+      });
+
+      test('should throw EmptyResultException when response is null', () async {
+        // arrange
+        final queryResult = getMockQueryResult(null);
+
+        when(getMovieDetailsQuery).thenAnswer((_) async => queryResult);
+
+        // act
+        final movieDetailsEither =
+            await dataSource.getMovieDetails(movieId: '');
+
+        // assert
+        expectLeft<Exception, MovieDetails, EmptyResultException>(
+            movieDetailsEither);
+        verifySingleCallAndNoMoreInteractions();
+      });
+
+      test('should throw QueryFailureException when there is a query error',
+          () async {
+        // arrange
+        when(getMovieDetailsQuery).thenThrow(Exception());
+
+        // act
+        final movieDetailsEither =
+            await dataSource.getMovieDetails(movieId: '');
+
+        // assert
+        expectLeft<Exception, MovieDetails, QueryFailureException>(
+            movieDetailsEither);
+        verifySingleCallAndNoMoreInteractions();
+      });
+
+      test('should throw QueryFailureException when hasException is true',
+          () async {
+        // arrange
+        final queryResult = getMockQueryResult(jsonData, hasException: true);
+
+        when(getMovieDetailsQuery).thenAnswer((_) async => queryResult);
+
+        // act
+        final movieDetailsEither =
+            await dataSource.getMovieDetails(movieId: '');
+
+        // assert
+        expectLeft<Exception, MovieDetails, QueryFailureException>(
+            movieDetailsEither);
         verifySingleCallAndNoMoreInteractions();
       });
     });
