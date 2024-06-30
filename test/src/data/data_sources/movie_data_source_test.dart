@@ -1,4 +1,4 @@
-import 'package:coolmovies/src/data/data_sources/data_sources.dart';
+import 'package:coolmovies/src/data/data.dart';
 import 'package:coolmovies/src/models/models.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:graphql/client.dart';

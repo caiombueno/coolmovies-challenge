@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:coolmovies/src/data/data_sources/operations/operations.dart';
+import 'package:coolmovies/src/data/data.dart';
 import 'package:coolmovies/src/models/models.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:graphql/client.dart';

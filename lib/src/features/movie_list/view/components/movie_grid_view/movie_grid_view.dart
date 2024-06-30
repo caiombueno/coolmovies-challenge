@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:coolmovies/src/data/repositories/repositories.dart';
+import 'package:coolmovies/src/data/data.dart';
 import 'package:coolmovies/src/features/movie_list/state_management/state_management.dart';
 import 'package:coolmovies/src/features/movie_list/view/components/components.dart';
 import 'package:coolmovies/src/models/models.dart';

@@ -1,5 +1,4 @@
-import 'package:coolmovies/src/data/data_sources/data_sources.dart';
-import 'package:coolmovies/src/data/repositories/repositories.dart';
+import 'package:coolmovies/src/data/data.dart';
 import 'package:graphql/client.dart';
 import 'package:mocktail/mocktail.dart';
 

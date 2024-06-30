@@ -1,4 +1,4 @@
-import 'package:coolmovies/src/data/repositories/repositories.dart';
+import 'package:coolmovies/src/data/data.dart';
 import 'package:coolmovies/src/features/movie_list/state_management/state_management.dart';
 import 'package:coolmovies/src/models/models.dart';
 import 'package:flutter_test/flutter_test.dart';

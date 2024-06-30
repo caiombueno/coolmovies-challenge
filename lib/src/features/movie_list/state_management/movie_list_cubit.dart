@@ -1,4 +1,4 @@
-import 'package:coolmovies/src/data/repositories/movie_repository.dart';
+import 'package:coolmovies/src/data/data.dart';
 import 'package:coolmovies/src/models/models.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

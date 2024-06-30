@@ -1,4 +1,4 @@
-import 'package:coolmovies/src/data/data_sources/data_sources.dart';
+import 'package:coolmovies/src/data/data.dart';
 import 'package:coolmovies/src/models/models.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
