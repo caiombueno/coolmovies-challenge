@@ -23,12 +23,16 @@ void main() {
         verifyNoMoreInteractions(movieDataSource);
       }
 
+      When<Future<Either<Exception, List<MovieSummary>>>>
+          stubDataSourceCall() =>
+              when(() => movieDataSource.getMovieSummaryList());
+
       test(
           'should return list of MovieSummary when data source call is successful',
           () async {
         // arrange
         const movieSummaries = [MovieSummary(id: '1', title: 'Test Movie')];
-        when(() => movieDataSource.getMovieSummaryList())
+        stubDataSourceCall()
             .thenAnswer((_) async => const Right(movieSummaries));
 
         // act
@@ -40,10 +44,10 @@ void main() {
       });
 
       test(
-          'should return NoMoviesFoundException when data source returns EmptyResultException',
+          'should return NoMovieSummaryListFoundException when data source returns EmptyResultException',
           () async {
         // arrange
-        when(() => movieDataSource.getMovieSummaryList()).thenAnswer(
+        stubDataSourceCall().thenAnswer(
           (_) async => const Left(EmptyResultException()),
         );
 
@@ -51,17 +55,17 @@ void main() {
         final result = await movieRepository.getMovieSummaryList();
 
         // assert
-        expectLeft<DataException, List<MovieSummary>, NoMoviesFoundException>(
-            result);
+        expectLeft<DataException, List<MovieSummary>,
+            NoMovieSummaryListFoundException>(result);
         verifySingleCallAndNoMoreInteractions();
       });
 
       test(
-          'should return MoviesFetchFailureException when data source call fails',
+          'should return MovieSummaryListFetchFailureException when data source call fails',
           () async {
         // arrange
-        when(() => movieDataSource.getMovieSummaryList()).thenAnswer(
-          (_) async => const Left(MoviesFetchFailureException()),
+        stubDataSourceCall().thenAnswer(
+          (_) async => Left(Exception()),
         );
 
         // act
@@ -69,7 +73,68 @@ void main() {
 
         // assert
         expectLeft<DataException, List<MovieSummary>,
-            MoviesFetchFailureException>(result);
+            MovieSummaryListFetchFailureException>(result);
+        verifySingleCallAndNoMoreInteractions();
+      });
+    });
+
+    group('getMovieDetails', () {
+      void verifySingleCallAndNoMoreInteractions() {
+        verify(() =>
+                movieDataSource.getMovieDetails(movieId: any(named: 'movieId')))
+            .called(1);
+        verifyNoMoreInteractions(movieDataSource);
+      }
+
+      When<Future<Either<Exception, MovieDetails>>> stubDataSourceCall() =>
+          when(() =>
+              movieDataSource.getMovieDetails(movieId: any(named: 'movieId')));
+
+      Future<Either<DataException, MovieDetails>> getMovieDetails() =>
+          movieRepository.getMovieDetails(movieId: '');
+
+      test('should return MovieDetails when data source call is successful',
+          () async {
+        // arrange
+        const movieDetails = MovieDetails(movieId: 'movieId');
+        stubDataSourceCall().thenAnswer((_) async => const Right(movieDetails));
+
+        // act
+        final result = await getMovieDetails();
+
+        // assert
+        expectRight<DataException, MovieDetails>(result, movieDetails);
+        verifySingleCallAndNoMoreInteractions();
+      });
+
+      test(
+          'should return NoMovieDetailsFoundException when data source returns EmptyResultException',
+          () async {
+        // arrange
+        stubDataSourceCall()
+            .thenAnswer((_) async => const Left(EmptyResultException()));
+
+        // act
+        final result = await getMovieDetails();
+
+        // assert
+        expectLeft<DataException, MovieDetails, NoMovieDetailsFoundException>(
+            result);
+        verifySingleCallAndNoMoreInteractions();
+      });
+
+      test(
+          'should return MovieDetailsFetchFailureException when data source call fails',
+          () async {
+        // arrange
+        stubDataSourceCall().thenAnswer((_) async => Left(Exception()));
+
+        // act
+        final result = await getMovieDetails();
+
+        // assert
+        expectLeft<DataException, MovieDetails,
+            MovieDetailsFetchFailureException>(result);
         verifySingleCallAndNoMoreInteractions();
       });
     });

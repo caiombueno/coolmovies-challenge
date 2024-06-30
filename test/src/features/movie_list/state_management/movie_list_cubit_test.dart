@@ -55,7 +55,7 @@ void main() {
         'emits [MovieListFailed] when getMovieSummaryList fails',
         setUp: () =>
             when(() => movieRepository.getMovieSummaryList()).thenAnswer(
-          (_) async => const Left(MoviesFetchFailureException()),
+          (_) async => const Left(MovieSummaryListFetchFailureException()),
         ),
         build: () => movieListCubit,
         act: (cubit) => cubit.getMovieSummaryList(),
@@ -63,7 +63,7 @@ void main() {
         verify: (cubit) {
           verifySingleCallAndNoMoreInteractions();
           final exception = (cubit.state as MovieListFailed).exception;
-          expect(exception, const MoviesFetchFailureException());
+          expect(exception, const MovieSummaryListFetchFailureException());
         },
       );
     });
