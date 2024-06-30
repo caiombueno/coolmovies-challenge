@@ -1,4 +1,4 @@
-import 'package:coolmovies/src/models/movie_summary.dart';
+import 'package:coolmovies/src/models/models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
