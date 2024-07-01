@@ -137,5 +137,59 @@ void main() {
         verifySingleCallAndNoMoreInteractions();
       });
     });
+
+    group('getMovieReviews', () {
+      void verifySingleCallAndNoMoreInteractions() {
+        verify(() =>
+                movieDataSource.getMovieReviews(movieId: any(named: 'movieId')))
+            .called(1);
+        verifyNoMoreInteractions(movieDataSource);
+      }
+
+      When<Future<Either<Exception, MovieReviewList>>> stubDataSourceCall() =>
+          when(() =>
+              movieDataSource.getMovieReviews(movieId: any(named: 'movieId')));
+
+      Future<Either<DataException, MovieReviewList>> getMovieReviews() =>
+          movieRepository.getMovieReviews(movieId: '');
+
+      test('should return MovieReviewList when data source call is successful',
+          () async {
+        // arrange
+        const movieReviews = MovieReviewList(movieId: 'movieId');
+        stubDataSourceCall().thenAnswer((_) async => const Right(movieReviews));
+        // act
+        final result = await getMovieReviews();
+        // assert
+        expectRight<DataException, MovieReviewList>(result, movieReviews);
+        verifySingleCallAndNoMoreInteractions();
+      });
+      test(
+          'should return NoMovieReviewsFoundException when data source returns EmptyResultException',
+          () async {
+        // arrange
+        stubDataSourceCall()
+            .thenAnswer((_) async => const Left(EmptyResultException()));
+
+        // act
+        final result = await getMovieReviews();
+        // assert
+        expectLeft<DataException, MovieReviewList,
+            NoMovieReviewsFoundException>(result);
+        verifySingleCallAndNoMoreInteractions();
+      });
+      test(
+          'should return MovieReviewsFetchFailureException when data source call fails',
+          () async {
+        // arrange
+        stubDataSourceCall().thenAnswer((_) async => Left(Exception()));
+        // act
+        final result = await getMovieReviews();
+        // assert
+        expectLeft<DataException, MovieReviewList,
+            MovieReviewsFetchFailureException>(result);
+        verifySingleCallAndNoMoreInteractions();
+      });
+    });
   });
 }
