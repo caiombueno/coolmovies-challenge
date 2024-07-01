@@ -1,3 +1,4 @@
+import 'package:coolmovies/src/features/movie_details/view/view.dart';
 import 'package:coolmovies/src/features/movie_list/view/view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -9,10 +10,22 @@ final router = GoRouter(
   routes: $appRoutes,
 );
 
-@TypedGoRoute<HomeRoute>(path: '/')
+@TypedGoRoute<HomeRoute>(
+    path: '/',
+    routes: [TypedGoRoute<MovieDetailsRoute>(path: 'movie/:movieId')])
 class HomeRoute extends GoRouteData {
   const HomeRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) => const HomeScreen();
+}
+
+class MovieDetailsRoute extends GoRouteData {
+  final String movieId;
+
+  MovieDetailsRoute(this.movieId);
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      MovieDetailsScreen(movieId);
 }

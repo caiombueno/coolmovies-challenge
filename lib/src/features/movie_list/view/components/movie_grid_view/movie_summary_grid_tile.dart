@@ -1,6 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:coolmovies/src/constants/app_sizes.dart';
+import 'package:coolmovies/src/features/commons/views/movie_image.dart';
 import 'package:coolmovies/src/models/models.dart';
+import 'package:coolmovies/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
 
 class MovieSummaryGridTile extends StatelessWidget {
@@ -12,20 +13,23 @@ class MovieSummaryGridTile extends StatelessWidget {
     final title = movieSummary.title;
     final overallRating = movieSummary.overallRating;
     final imageUrl = movieSummary.imgUrl;
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Sizes.p4),
-        color: Colors.white,
-        border: Border.all(color: Colors.black, width: 0.5),
-      ),
-      margin: const EdgeInsets.all(Sizes.p8),
-      padding: const EdgeInsets.all(Sizes.p8),
-      child: _CustomGridTile(
-        footer: _GridTileFooter(
-          title: title,
-          overallRating: overallRating,
+    return GestureDetector(
+      onTap: () => MovieDetailsRoute(movieSummary.id).push(context),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(Sizes.p4),
+          color: Colors.white,
+          border: Border.all(color: Colors.black, width: 0.5),
         ),
-        child: (imageUrl != null) ? _LeadingImage(imageUrl: imageUrl) : null,
+        margin: const EdgeInsets.all(Sizes.p8),
+        padding: const EdgeInsets.all(Sizes.p8),
+        child: _CustomGridTile(
+          footer: _GridTileFooter(
+            title: title,
+            overallRating: overallRating,
+          ),
+          child: (imageUrl != null) ? _LeadingImage(imageUrl: imageUrl) : null,
+        ),
       ),
     );
   }
@@ -104,7 +108,7 @@ class _LeadingImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
+    return MovieImage(
       imageUrl: imageUrl,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
@@ -113,8 +117,6 @@ class _LeadingImage extends StatelessWidget {
         ),
       ),
       fit: BoxFit.cover,
-      placeholder: (_, __) => const Center(child: CircularProgressIndicator()),
-      errorWidget: (_, __, ___) => const Center(child: Icon(Icons.error)),
     );
   }
 }

@@ -13,6 +13,12 @@ List<RouteBase> get $appRoutes => [
 RouteBase get $homeRoute => GoRouteData.$route(
       path: '/',
       factory: $HomeRouteExtension._fromState,
+      routes: [
+        GoRouteData.$route(
+          path: 'movie/:movieId',
+          factory: $MovieDetailsRouteExtension._fromState,
+        ),
+      ],
     );
 
 extension $HomeRouteExtension on HomeRoute {
@@ -20,6 +26,25 @@ extension $HomeRouteExtension on HomeRoute {
 
   String get location => GoRouteData.$location(
         '/',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $MovieDetailsRouteExtension on MovieDetailsRoute {
+  static MovieDetailsRoute _fromState(GoRouterState state) => MovieDetailsRoute(
+        state.pathParameters['movieId']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/movie/${Uri.encodeComponent(movieId)}',
       );
 
   void go(BuildContext context) => context.go(location);
