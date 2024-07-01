@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, no_leading_underscores_for_local_identifiers
+
 import 'dart:async';
 import 'package:gql/ast.dart';
 import 'package:graphql/client.dart' as graphql;
@@ -83,7 +85,7 @@ class Variables$Mutation$CreateMovieReview {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Variables$Mutation$CreateMovieReview) ||
+    if (other is! Variables$Mutation$CreateMovieReview ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -169,6 +171,7 @@ class _CopyWithImpl$Variables$Mutation$CreateMovieReview<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
+  @override
   TRes call({
     Object? title = _undefined,
     Object? body = _undefined,
@@ -192,8 +195,9 @@ class _CopyWithStubImpl$Variables$Mutation$CreateMovieReview<TRes>
     implements CopyWith$Variables$Mutation$CreateMovieReview<TRes> {
   _CopyWithStubImpl$Variables$Mutation$CreateMovieReview(this._res);
 
-  TRes _res;
+  final TRes _res;
 
+  @override
   call({
     String? title,
     String? body,
@@ -250,7 +254,7 @@ class Mutation$CreateMovieReview {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$CreateMovieReview) ||
+    if (other is! Mutation$CreateMovieReview ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -307,6 +311,7 @@ class _CopyWithImpl$Mutation$CreateMovieReview<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
+  @override
   TRes call({
     Object? createMovieReview = _undefined,
     Object? $__typename = _undefined,
@@ -321,6 +326,7 @@ class _CopyWithImpl$Mutation$CreateMovieReview<TRes>
             : ($__typename as String),
       ));
 
+  @override
   CopyWith$Mutation$CreateMovieReview$createMovieReview<TRes>
       get createMovieReview {
     final local$createMovieReview = _instance.createMovieReview;
@@ -336,14 +342,16 @@ class _CopyWithStubImpl$Mutation$CreateMovieReview<TRes>
     implements CopyWith$Mutation$CreateMovieReview<TRes> {
   _CopyWithStubImpl$Mutation$CreateMovieReview(this._res);
 
-  TRes _res;
+  final TRes _res;
 
+  @override
   call({
     Mutation$CreateMovieReview$createMovieReview? createMovieReview,
     String? $__typename,
   }) =>
       _res;
 
+  @override
   CopyWith$Mutation$CreateMovieReview$createMovieReview<TRes>
       get createMovieReview =>
           CopyWith$Mutation$CreateMovieReview$createMovieReview.stub(_res);
@@ -617,11 +625,11 @@ extension ClientExtension$Mutation$CreateMovieReview on graphql.GraphQLClient {
   Future<graphql.QueryResult<Mutation$CreateMovieReview>>
       mutate$CreateMovieReview(
               Options$Mutation$CreateMovieReview options) async =>
-          await this.mutate(options);
+          await mutate(options);
   graphql.ObservableQuery<Mutation$CreateMovieReview>
       watchMutation$CreateMovieReview(
               WatchOptions$Mutation$CreateMovieReview options) =>
-          this.watchMutation(options);
+          watchMutation(options);
 }
 
 class Mutation$CreateMovieReview$createMovieReview {
@@ -671,7 +679,7 @@ class Mutation$CreateMovieReview$createMovieReview {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$CreateMovieReview$createMovieReview) ||
+    if (other is! Mutation$CreateMovieReview$createMovieReview ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -729,6 +737,7 @@ class _CopyWithImpl$Mutation$CreateMovieReview$createMovieReview<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
+  @override
   TRes call({
     Object? movieReview = _undefined,
     Object? $__typename = _undefined,
@@ -743,6 +752,7 @@ class _CopyWithImpl$Mutation$CreateMovieReview$createMovieReview<TRes>
             : ($__typename as String),
       ));
 
+  @override
   CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview<TRes>
       get movieReview {
     final local$movieReview = _instance.movieReview;
@@ -758,14 +768,16 @@ class _CopyWithStubImpl$Mutation$CreateMovieReview$createMovieReview<TRes>
     implements CopyWith$Mutation$CreateMovieReview$createMovieReview<TRes> {
   _CopyWithStubImpl$Mutation$CreateMovieReview$createMovieReview(this._res);
 
-  TRes _res;
+  final TRes _res;
 
+  @override
   call({
     Mutation$CreateMovieReview$createMovieReview$movieReview? movieReview,
     String? $__typename,
   }) =>
       _res;
 
+  @override
   CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview<TRes>
       get movieReview =>
           CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview
@@ -856,7 +868,7 @@ class Mutation$CreateMovieReview$createMovieReview$movieReview {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Mutation$CreateMovieReview$createMovieReview$movieReview) ||
+    if (other is! Mutation$CreateMovieReview$createMovieReview$movieReview ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -947,6 +959,7 @@ class _CopyWithImpl$Mutation$CreateMovieReview$createMovieReview$movieReview<
 
   static const _undefined = <dynamic, dynamic>{};
 
+  @override
   TRes call({
     Object? id = _undefined,
     Object? title = _undefined,
@@ -969,6 +982,7 @@ class _CopyWithImpl$Mutation$CreateMovieReview$createMovieReview$movieReview<
             : ($__typename as String),
       ));
 
+  @override
   CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId<
       TRes> get userByUserReviewerId {
     final local$userByUserReviewerId = _instance.userByUserReviewerId;
@@ -988,8 +1002,9 @@ class _CopyWithStubImpl$Mutation$CreateMovieReview$createMovieReview$movieReview
   _CopyWithStubImpl$Mutation$CreateMovieReview$createMovieReview$movieReview(
       this._res);
 
-  TRes _res;
+  final TRes _res;
 
+  @override
   call({
     String? id,
     String? title,
@@ -1001,6 +1016,7 @@ class _CopyWithStubImpl$Mutation$CreateMovieReview$createMovieReview$movieReview
   }) =>
       _res;
 
+  @override
   CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId<
           TRes>
       get userByUserReviewerId =>
@@ -1052,8 +1068,8 @@ class Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewe
     if (identical(this, other)) {
       return true;
     }
-    if (!(other
-            is Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId) ||
+    if (other
+            is! Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -1121,6 +1137,7 @@ class _CopyWithImpl$Mutation$CreateMovieReview$createMovieReview$movieReview$use
 
   static const _undefined = <dynamic, dynamic>{};
 
+  @override
   TRes call({
     Object? name = _undefined,
     Object? $__typename = _undefined,
@@ -1142,8 +1159,9 @@ class _CopyWithStubImpl$Mutation$CreateMovieReview$createMovieReview$movieReview
   _CopyWithStubImpl$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId(
       this._res);
 
-  TRes _res;
+  final TRes _res;
 
+  @override
   call({
     String? name,
     String? $__typename,

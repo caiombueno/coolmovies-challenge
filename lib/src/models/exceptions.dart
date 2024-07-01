@@ -14,15 +14,8 @@ abstract class DataException extends AppException {
 }
 
 class ServerCommunicationFailureException extends DataException {
-  const ServerCommunicationFailureException() : super('query-failure');
-
-  @override
-  String getMessage(BuildContext context) =>
-      context.l10n.serverCommunicationFailureExceptionMessage;
-}
-
-class MutationFailureException extends DataException {
-  const MutationFailureException() : super('mutation-failure');
+  const ServerCommunicationFailureException()
+      : super('server-communication-failure');
 
   @override
   String getMessage(BuildContext context) =>

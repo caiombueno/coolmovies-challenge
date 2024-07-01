@@ -77,7 +77,7 @@ class Input$CreateMovieReviewInput {
     if (identical(this, other)) {
       return true;
     }
-    if (!(other is Input$CreateMovieReviewInput) ||
+    if (other is! Input$CreateMovieReviewInput ||
         runtimeType != other.runtimeType) {
       return false;
     }
@@ -163,6 +163,7 @@ class _CopyWithImpl$Input$CreateMovieReviewInput<TRes>
 
   static const _undefined = <dynamic, dynamic>{};
 
+  @override
   TRes call({
     Object? title = _undefined,
     Object? body = _undefined,
@@ -186,8 +187,9 @@ class _CopyWithStubImpl$Input$CreateMovieReviewInput<TRes>
     implements CopyWith$Input$CreateMovieReviewInput<TRes> {
   _CopyWithStubImpl$Input$CreateMovieReviewInput(this._res);
 
-  TRes _res;
+  final TRes _res;
 
+  @override
   call({
     String? title,
     String? body,

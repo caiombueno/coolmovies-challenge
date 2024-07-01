@@ -85,9 +85,72 @@ class MovieDataSource {
       return Either.left(Exception(e.toString()));
     }
   }
+
+  Future<Either<Exception, MovieReviewList>> getMovieReviews(
+      {required String movieId}) async {
+    try {
+      final result = await _client
+          .query$GetMovieReviews(
+            Options$Query$GetMovieReviews(
+                variables: Variables$Query$GetMovieReviews(movieId: movieId)),
+          )
+          .onError(
+              (_, __) => throw const ServerCommunicationFailureException());
+
+      if (result.hasException) {
+        throw const ServerCommunicationFailureException();
+      }
+
+      final data = result.data;
+
+      if (data == null || data.isEmpty) throw const EmptyResultException();
+
+      final reviewList = _MovieDataSourceParser.parseMovieReviews(data);
+
+      return reviewList.fold(
+        (exception) => throw exception,
+        (reviewList) => Either.right(reviewList),
+      );
+    } on AppException catch (e) {
+      return Either.left(e);
+    } catch (e) {
+      return Either.left(Exception(e.toString()));
+    }
+  }
+
 }
 
 class _MovieDataSourceParser {
+
+  static Either<DataFormatFailureException, MovieReviewList> parseMovieReviews(
+      Map<String, dynamic> data) {
+    return Either.tryCatch(
+      () {
+        final parsedData = Query$GetMovieReviews.fromJson(data).movieById;
+        if (parsedData == null) throw const DataFormatFailureException();
+        final movieId = parsedData.id;
+
+        final reviews = parsedData.movieReviewsByMovieId?.nodes.map((e) {
+              final reviewer = e.userByUserReviewerId;
+              final reviewerId = reviewer?.id;
+              return MovieReview(
+                reviewId: e.id,
+                title: e.title,
+                body: e.body,
+                rating: e.rating,
+                reviewer: (reviewerId != null)
+                    ? User(userId: reviewerId, name: reviewer?.name)
+                    : null,
+              );
+            }).toList() ??
+            [];
+
+        return MovieReviewList(movieId: movieId, reviews: reviews);
+      },
+      (_, __) => const DataFormatFailureException(),
+    );
+  }
+
   static Either<DataFormatFailureException, List<MovieSummary>>
       parseMovieSummaryList(Map<String, dynamic> data) {
     return Either.tryCatch(
