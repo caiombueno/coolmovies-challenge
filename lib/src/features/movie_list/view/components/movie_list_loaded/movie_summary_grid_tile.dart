@@ -13,22 +13,27 @@ class MovieSummaryGridTile extends StatelessWidget {
     final title = movieSummary.title;
     final overallRating = movieSummary.overallRating;
     final imageUrl = movieSummary.imgUrl;
+
+    final decoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(Sizes.p4),
+      // color: Colors.white,
+      border: Border.all(width: 0.5, color: Colors.white),
+    );
+
+    final footer = _GridTileFooter(
+      title: title,
+      overallRating: overallRating,
+    );
+
     return GestureDetector(
       onTap: () => MovieDetailsRoute(movieSummary.id).push(context),
       child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Sizes.p4),
-          color: Colors.white,
-          border: Border.all(color: Colors.black, width: 0.5),
-        ),
+        decoration: decoration,
         margin: const EdgeInsets.all(Sizes.p8),
         padding: const EdgeInsets.all(Sizes.p8),
         child: _CustomGridTile(
-          footer: _GridTileFooter(
-            title: title,
-            overallRating: overallRating,
-          ),
-          child: (imageUrl != null) ? _LeadingImage(imageUrl: imageUrl) : null,
+          footer: footer,
+          child: (imageUrl != null) ? _MovieImage(imageUrl: imageUrl) : null,
         ),
       ),
     );
@@ -47,6 +52,22 @@ class _GridTileFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final titleString = title;
+    final titleText = (titleString != null)
+        ? Text(
+            titleString,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          )
+        : null;
+
+    final ratingIndicator = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const SizedBox.shrink(),
+        _RatingIndicator(overallRating),
+      ],
+    );
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: Sizes.p4),
       child: Column(
@@ -54,29 +75,44 @@ class _GridTileFooter extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          if (titleString != null)
-            Flexible(
-              flex: 2,
-              child: Text(
-                titleString,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-              ),
-            ),
-          Flexible(
-            flex: 1,
-            child: Text(
-              overallRating.toString(),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
+          if (titleText != null) Flexible(flex: 2, child: titleText),
+          Flexible(flex: 1, child: ratingIndicator),
         ],
       ),
     );
   }
 }
 
-// TODO: move this widget
+class _RatingIndicator extends StatelessWidget {
+  const _RatingIndicator(this.rating);
+  final double rating;
+
+  @override
+  Widget build(BuildContext context) {
+    const starIcon = Icon(
+      Icons.star,
+      color: Colors.yellow,
+      size: Sizes.p16,
+    );
+
+    final ratingText = Text(
+      rating.toString(),
+      style: const TextStyle(
+        fontSize: Sizes.p12,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        starIcon,
+        ratingText,
+      ],
+    );
+  }
+}
+
 class _CustomGridTile extends StatelessWidget {
   const _CustomGridTile({this.child, this.footer});
   final Widget? child;
@@ -102,8 +138,8 @@ class _CustomGridTile extends StatelessWidget {
   }
 }
 
-class _LeadingImage extends StatelessWidget {
-  const _LeadingImage({required this.imageUrl});
+class _MovieImage extends StatelessWidget {
+  const _MovieImage({required this.imageUrl});
   final String imageUrl;
 
   @override

@@ -5,21 +5,27 @@ import 'package:go_router/go_router.dart';
 part 'app_router.g.dart';
 
 final router = GoRouter(
-  initialLocation: const HomeRoute().location,
+  initialLocation: const MovieListRoute().location,
   debugLogDiagnostics: true,
   routes: $appRoutes,
+  redirect: (context, state) {
+    if (state.uri.path == '/') {
+      return const MovieListRoute().location;
+    }
+    return null;
+  },
 );
 
-@TypedGoRoute<HomeRoute>(
-    path: '/',
-    routes: [TypedGoRoute<MovieDetailsRoute>(path: 'movie/:movieId')])
-class HomeRoute extends GoRouteData {
-  const HomeRoute();
+@TypedGoRoute<MovieListRoute>(path: '/movie-list')
+class MovieListRoute extends GoRouteData {
+  const MovieListRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => const HomeScreen();
+  Widget build(BuildContext context, GoRouterState state) =>
+      const MovieListScreen();
 }
 
+@TypedGoRoute<MovieDetailsRoute>(path: '/movie/:movieId')
 class MovieDetailsRoute extends GoRouteData {
   final String movieId;
 

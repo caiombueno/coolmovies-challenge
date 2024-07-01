@@ -7,25 +7,21 @@ part of 'app_router.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
-      $homeRoute,
+      $movieListRoute,
+      $movieDetailsRoute,
     ];
 
-RouteBase get $homeRoute => GoRouteData.$route(
-      path: '/',
-      factory: $HomeRouteExtension._fromState,
-      routes: [
-        GoRouteData.$route(
-          path: 'movie/:movieId',
-          factory: $MovieDetailsRouteExtension._fromState,
-        ),
-      ],
+RouteBase get $movieListRoute => GoRouteData.$route(
+      path: '/movie-list',
+      factory: $MovieListRouteExtension._fromState,
     );
 
-extension $HomeRouteExtension on HomeRoute {
-  static HomeRoute _fromState(GoRouterState state) => const HomeRoute();
+extension $MovieListRouteExtension on MovieListRoute {
+  static MovieListRoute _fromState(GoRouterState state) =>
+      const MovieListRoute();
 
   String get location => GoRouteData.$location(
-        '/',
+        '/movie-list',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -37,6 +33,11 @@ extension $HomeRouteExtension on HomeRoute {
 
   void replace(BuildContext context) => context.replace(location);
 }
+
+RouteBase get $movieDetailsRoute => GoRouteData.$route(
+      path: '/movie/:movieId',
+      factory: $MovieDetailsRouteExtension._fromState,
+    );
 
 extension $MovieDetailsRouteExtension on MovieDetailsRoute {
   static MovieDetailsRoute _fromState(GoRouterState state) => MovieDetailsRoute(
