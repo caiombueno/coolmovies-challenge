@@ -462,5 +462,114 @@ void main() {
         verifySingleCallAndNoMoreInteractions();
       });
     });
+
+    group('getCurrentUser', () {
+      setUpAll(() =>
+          registerFallbackValue(FakeQueryOptions<Query$GetCurrentUser>()));
+
+      Future<QueryResult<Query$GetCurrentUser>> getCurrentUserQuery() =>
+          makeQuery<Query$GetCurrentUser>();
+
+      QueryResult<Query$GetCurrentUser> getMockQueryResult(
+        Map<String, dynamic>? data, {
+        bool hasException = false,
+      }) =>
+          getMockQueryResultOfType<Query$GetCurrentUser>(
+            data,
+            hasException: hasException,
+          );
+
+      void verifySingleCallAndNoMoreInteractions() =>
+          verifySingleCallAndNoMoreInteractionsToQuery(getCurrentUserQuery);
+
+      const currentUser = User(userId: 'user1', name: 'User 1');
+
+      final jsonData = {
+        "__typename": "Query",
+        "currentUser": {
+          "__typename": "User",
+          "id": currentUser.userId,
+          "name": currentUser.name
+        }
+      };
+
+      Future<Either<Exception, User>> getCurrentUser() =>
+          dataSource.getCurrentUser();
+
+      test('should return current user when response is successful', () async {
+        // arrange
+        final mockQueryResult = getMockQueryResult(jsonData);
+
+        when(getCurrentUserQuery).thenAnswer((_) async => mockQueryResult);
+
+        // act
+        final userEither = await getCurrentUser();
+
+        // assert
+        expectRight<Exception, User>(userEither, currentUser);
+        verifySingleCallAndNoMoreInteractions();
+      });
+
+      test('should throw EmptyResultException when response is empty',
+          () async {
+        // arrange
+        final queryResult = getMockQueryResult({});
+
+        when(getCurrentUserQuery).thenAnswer((_) async => queryResult);
+
+        // act
+        final userEither = await getCurrentUser();
+
+        // assert
+        expectLeft<Exception, User, EmptyResultException>(userEither);
+        verifySingleCallAndNoMoreInteractions();
+      });
+
+      test('should throw EmptyResultException when response is null', () async {
+        // arrange
+        final queryResult = getMockQueryResult(null);
+
+        when(getCurrentUserQuery).thenAnswer((_) async => queryResult);
+
+        // act
+        final userEither = await getCurrentUser();
+
+        // assert
+        expectLeft<Exception, User, EmptyResultException>(userEither);
+        verifySingleCallAndNoMoreInteractions();
+      });
+
+      test(
+          'should throw ServerCommunicationFailureException when there is a query error',
+          () async {
+        // arrange
+        when(getCurrentUserQuery).thenThrow(Exception());
+
+        // act
+        final userEither = await getCurrentUser();
+
+        // assert
+        expectLeft<Exception, User, ServerCommunicationFailureException>(
+            userEither);
+        verifySingleCallAndNoMoreInteractions();
+      });
+
+      test(
+          'should throw ServerCommunicationFailureException when hasException is true',
+          () async {
+        // arrange
+        final queryResult = getMockQueryResult(jsonData, hasException: true);
+
+        when(getCurrentUserQuery).thenAnswer((_) async => queryResult);
+
+        // act
+        final userEither = await getCurrentUser();
+
+        // assert
+        expectLeft<Exception, User, ServerCommunicationFailureException>(
+            userEither);
+        verifySingleCallAndNoMoreInteractions();
+      });
+    });
   });
 }
