@@ -118,9 +118,52 @@ class MovieDataSource {
     }
   }
 
+  Future<Either<Exception, User>> getCurrentUser() async {
+    try {
+      final result = await _client.query$GetCurrentUser().onError(
+          (_, __) => throw const ServerCommunicationFailureException());
+
+      if (result.hasException) {
+        throw const ServerCommunicationFailureException();
+      }
+
+      final data = result.data;
+
+      if (data == null || data.isEmpty) throw const EmptyResultException();
+
+      final currentUser = _MovieDataSourceParser.parseCurrentUser(data);
+
+      return currentUser.fold(
+        (exception) => throw exception,
+        (currentUser) => Either.right(currentUser),
+      );
+    } on AppException catch (e) {
+      return Either.left(e);
+    } catch (e) {
+      return Either.left(Exception(e.toString()));
+    }
+  }
+
 }
 
 class _MovieDataSourceParser {
+  static Either<DataFormatFailureException, User> parseCurrentUser(
+      Map<String, dynamic> data) {
+    return Either.tryCatch(
+      () {
+        final parsedData = Query$GetCurrentUser.fromJson(data).currentUser;
+        if (parsedData == null) throw const DataFormatFailureException();
+
+        final currentUser = User(
+          userId: parsedData.id,
+          name: parsedData.name,
+        );
+
+        return currentUser;
+      },
+      (_, __) => const DataFormatFailureException(),
+    );
+  }
 
   static Either<DataFormatFailureException, MovieReviewList> parseMovieReviews(
       Map<String, dynamic> data) {
