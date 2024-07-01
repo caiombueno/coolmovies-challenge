@@ -20,6 +20,7 @@ mutation CreateMovieReview(
       body
       rating
       userByUserReviewerId {
+        id
         name
       }
     }

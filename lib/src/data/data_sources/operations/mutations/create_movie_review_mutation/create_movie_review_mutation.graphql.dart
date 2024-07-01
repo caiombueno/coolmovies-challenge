@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, no_leading_underscores_for_local_identifiers
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:async';
 import 'package:gql/ast.dart';
@@ -231,12 +231,12 @@ class Mutation$CreateMovieReview {
   final String $__typename;
 
   Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
+    final resultData = <String, dynamic>{};
     final l$createMovieReview = createMovieReview;
-    _resultData['createMovieReview'] = l$createMovieReview?.toJson();
+    resultData['createMovieReview'] = l$createMovieReview?.toJson();
     final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
+    resultData['__typename'] = l$$__typename;
+    return resultData;
   }
 
   @override
@@ -489,6 +489,13 @@ const documentNodeMutationCreateMovieReview = DocumentNode(definitions: [
                 directives: [],
                 selectionSet: SelectionSetNode(selections: [
                   FieldNode(
+                    name: NameNode(value: 'id'),
+                    alias: null,
+                    arguments: [],
+                    directives: [],
+                    selectionSet: null,
+                  ),
+                  FieldNode(
                     name: NameNode(value: 'name'),
                     alias: null,
                     arguments: [],
@@ -656,12 +663,12 @@ class Mutation$CreateMovieReview$createMovieReview {
   final String $__typename;
 
   Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
+    final resultData = <String, dynamic>{};
     final l$movieReview = movieReview;
-    _resultData['movieReview'] = l$movieReview?.toJson();
+    resultData['movieReview'] = l$movieReview?.toJson();
     final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
+    resultData['__typename'] = l$$__typename;
+    return resultData;
   }
 
   @override
@@ -829,20 +836,20 @@ class Mutation$CreateMovieReview$createMovieReview$movieReview {
   final String $__typename;
 
   Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
+    final resultData = <String, dynamic>{};
     final l$id = id;
-    _resultData['id'] = l$id;
+    resultData['id'] = l$id;
     final l$title = title;
-    _resultData['title'] = l$title;
+    resultData['title'] = l$title;
     final l$body = body;
-    _resultData['body'] = l$body;
+    resultData['body'] = l$body;
     final l$rating = rating;
-    _resultData['rating'] = l$rating;
+    resultData['rating'] = l$rating;
     final l$userByUserReviewerId = userByUserReviewerId;
-    _resultData['userByUserReviewerId'] = l$userByUserReviewerId?.toJson();
+    resultData['userByUserReviewerId'] = l$userByUserReviewerId?.toJson();
     final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
+    resultData['__typename'] = l$$__typename;
+    return resultData;
   }
 
   @override
@@ -1026,38 +1033,47 @@ class _CopyWithStubImpl$Mutation$CreateMovieReview$createMovieReview$movieReview
 
 class Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId {
   Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId({
+    required this.id,
     this.name,
     this.$__typename = 'User',
   });
 
   factory Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId.fromJson(
       Map<String, dynamic> json) {
+    final l$id = json['id'];
     final l$name = json['name'];
     final l$$__typename = json['__typename'];
     return Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId(
+      id: (l$id as String),
       name: (l$name as String?),
       $__typename: (l$$__typename as String),
     );
   }
+
+  final String id;
 
   final String? name;
 
   final String $__typename;
 
   Map<String, dynamic> toJson() {
-    final _resultData = <String, dynamic>{};
+    final resultData = <String, dynamic>{};
+    final l$id = id;
+    resultData['id'] = l$id;
     final l$name = name;
-    _resultData['name'] = l$name;
+    resultData['name'] = l$name;
     final l$$__typename = $__typename;
-    _resultData['__typename'] = l$$__typename;
-    return _resultData;
+    resultData['__typename'] = l$$__typename;
+    return resultData;
   }
 
   @override
   int get hashCode {
+    final l$id = id;
     final l$name = name;
     final l$$__typename = $__typename;
     return Object.hashAll([
+      l$id,
       l$name,
       l$$__typename,
     ]);
@@ -1071,6 +1087,11 @@ class Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewe
     if (other
             is! Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId ||
         runtimeType != other.runtimeType) {
+      return false;
+    }
+    final l$id = id;
+    final lOther$id = other.id;
+    if (l$id != lOther$id) {
       return false;
     }
     final l$name = name;
@@ -1113,6 +1134,7 @@ abstract class CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview
       _CopyWithStubImpl$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId;
 
   TRes call({
+    String? id,
     String? name,
     String? $__typename,
   });
@@ -1139,11 +1161,13 @@ class _CopyWithImpl$Mutation$CreateMovieReview$createMovieReview$movieReview$use
 
   @override
   TRes call({
+    Object? id = _undefined,
     Object? name = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(
           Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId(
+        id: id == _undefined || id == null ? _instance.id : (id as String),
         name: name == _undefined ? _instance.name : (name as String?),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
@@ -1163,6 +1187,7 @@ class _CopyWithStubImpl$Mutation$CreateMovieReview$createMovieReview$movieReview
 
   @override
   call({
+    String? id,
     String? name,
     String? $__typename,
   }) =>

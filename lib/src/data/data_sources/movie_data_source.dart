@@ -144,9 +144,85 @@ class MovieDataSource {
     }
   }
 
+  Future<Either<Exception, MovieReview>> createMovieReview({
+    required String movieId,
+    required String userReviewerId,
+    required String title,
+    String? body,
+    int? rating,
+  }) async {
+    try {
+      final result = await _client
+          .mutate$CreateMovieReview(
+            Options$Mutation$CreateMovieReview(
+              variables: Variables$Mutation$CreateMovieReview(
+                movieId: movieId,
+                userReviewerId: userReviewerId,
+                title: title,
+                body: body,
+                rating: rating,
+              ),
+            ),
+          )
+          .onError(
+              (_, __) => throw const ServerCommunicationFailureException());
+
+      if (result.hasException) {
+        throw const ServerCommunicationFailureException();
+      }
+
+      final data = result.data;
+
+      if (data == null || data.isEmpty) throw const EmptyResultException();
+
+      final createdMovieReview =
+          _MovieDataSourceParser.parseCreatedMovieReview(data);
+
+      return createdMovieReview.fold(
+        (exception) => throw exception,
+        (movieReview) => Either.right(movieReview),
+      );
+    } on AppException catch (e) {
+      return Either.left(e);
+    } catch (e) {
+      return Either.left(Exception(e.toString()));
+    }
+  }
 }
 
 class _MovieDataSourceParser {
+  static Either<DataFormatFailureException, MovieReview>
+      parseCreatedMovieReview(Map<String, dynamic> data) {
+    return Either.tryCatch(
+      () {
+        final parsedData = Mutation$CreateMovieReview.fromJson(data)
+            .createMovieReview
+            ?.movieReview;
+
+        final parsedReviewerData = parsedData?.userByUserReviewerId;
+        if (parsedData == null || parsedReviewerData == null) {
+          throw const DataFormatFailureException();
+        }
+
+        final reviewer = User(
+          userId: parsedReviewerData.id,
+          name: parsedReviewerData.name,
+        );
+
+        final movieReview = MovieReview(
+          reviewId: parsedData.id,
+          title: parsedData.title,
+          body: parsedData.body,
+          rating: parsedData.rating,
+          reviewer: reviewer,
+        );
+
+        return movieReview;
+      },
+      (_, __) => const DataFormatFailureException(),
+    );
+  }
+
   static Either<DataFormatFailureException, User> parseCurrentUser(
       Map<String, dynamic> data) {
     return Either.tryCatch(
