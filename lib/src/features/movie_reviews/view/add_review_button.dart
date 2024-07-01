@@ -1,3 +1,4 @@
+import 'package:coolmovies/src/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AddReviewButton extends StatelessWidget {
@@ -7,7 +8,7 @@ class AddReviewButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {},
-      child: const Text('Add Review'),
+      child: Text(context.l10n.addReviewButtonLabel),
     );
   }
 }

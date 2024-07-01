@@ -1,7 +1,8 @@
 {
   "@@locale": "en",
   "appName": "CoolMovies",
-  "queryFailureExceptionMessage": "Error occurred while communicating with the server.",
+  "serverCommunicationFailureExceptionMessage": "Error occurred while communicating with the server.",
+
   "emptyResultExceptionMessage": "No data found.",
   "dataFormatFailureExceptionMessage": "Error occurred while processing the data.",
   "noMovieSummaryListFoundExceptionMessage": "No movies found.",
@@ -25,5 +26,6 @@
       }
     }
   },
-  "reviewsSectionTitle": "Reviews"
+  "reviewsSectionTitle": "Reviews",
+  "addReviewButtonLabel": "Add Review"
 }

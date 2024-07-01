@@ -159,8 +159,8 @@ void main() {
         final summariesEither = await dataSource.getMovieSummaryList();
 
         // assert
-        expectLeft<Exception, List<MovieSummary>, QueryFailureException>(
-            summariesEither);
+        expectLeft<Exception, List<MovieSummary>,
+            ServerCommunicationFailureException>(summariesEither);
         verifySingleCallAndNoMoreInteractions();
       });
 
@@ -175,8 +175,8 @@ void main() {
         final summariesEither = await dataSource.getMovieSummaryList();
 
         // assert
-        expectLeft<Exception, List<MovieSummary>, QueryFailureException>(
-            summariesEither);
+        expectLeft<Exception, List<MovieSummary>,
+            ServerCommunicationFailureException>(summariesEither);
         verifySingleCallAndNoMoreInteractions();
       });
     });
@@ -295,8 +295,8 @@ void main() {
             await dataSource.getMovieDetails(movieId: '');
 
         // assert
-        expectLeft<Exception, MovieDetails, QueryFailureException>(
-            movieDetailsEither);
+        expectLeft<Exception, MovieDetails,
+            ServerCommunicationFailureException>(movieDetailsEither);
         verifySingleCallAndNoMoreInteractions();
       });
 
@@ -312,8 +312,8 @@ void main() {
             await dataSource.getMovieDetails(movieId: '');
 
         // assert
-        expectLeft<Exception, MovieDetails, QueryFailureException>(
-            movieDetailsEither);
+        expectLeft<Exception, MovieDetails,
+            ServerCommunicationFailureException>(movieDetailsEither);
         verifySingleCallAndNoMoreInteractions();
       });
     });

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:coolmovies/src/data/data.dart';
+import 'package:coolmovies/src/data/data_sources/data_sources.dart';
 import 'package:coolmovies/src/models/models.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:graphql/client.dart';
@@ -29,9 +30,12 @@ class MovieDataSource {
     try {
       final result = await _client
           .query$GetMovieSummaryList(Options$Query$GetMovieSummaryList())
-          .onError((_, __) => throw const QueryFailureException());
+          .onError(
+              (_, __) => throw const ServerCommunicationFailureException());
 
-      if (result.hasException) throw const QueryFailureException();
+      if (result.hasException) {
+        throw const ServerCommunicationFailureException();
+      }
 
       final data = result.data;
 
@@ -58,9 +62,12 @@ class MovieDataSource {
             Options$Query$GetMovieDetails(
                 variables: Variables$Query$GetMovieDetails(id: movieId)),
           )
-          .onError((_, __) => throw const QueryFailureException());
+          .onError(
+              (_, __) => throw const ServerCommunicationFailureException());
 
-      if (result.hasException) throw const QueryFailureException();
+      if (result.hasException) {
+        throw const ServerCommunicationFailureException();
+      }
 
       final data = result.data;
 

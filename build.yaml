@@ -3,5 +3,8 @@ targets:
     builders:
       graphql_codegen:
         options:
+          scalars:
+            UUID:
+              type: String
           clients:
             - graphql

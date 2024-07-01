@@ -13,12 +13,20 @@ abstract class DataException extends AppException {
   const DataException(String code) : super(code);
 }
 
-class QueryFailureException extends DataException {
-  const QueryFailureException() : super('query-failure');
+class ServerCommunicationFailureException extends DataException {
+  const ServerCommunicationFailureException() : super('query-failure');
 
   @override
   String getMessage(BuildContext context) =>
-      context.l10n.queryFailureExceptionMessage;
+      context.l10n.serverCommunicationFailureExceptionMessage;
+}
+
+class MutationFailureException extends DataException {
+  const MutationFailureException() : super('mutation-failure');
+
+  @override
+  String getMessage(BuildContext context) =>
+      context.l10n.serverCommunicationFailureExceptionMessage;
 }
 
 class EmptyResultException extends DataException {

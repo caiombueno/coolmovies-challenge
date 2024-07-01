@@ -1,4 +1,4 @@
-type Movie {
+type MovieDetails {
   id: ID!
   title: String
   releaseDate: String
@@ -42,7 +42,24 @@ type MovieSummaryConnection {
 
 type Query {
   allMovies: MovieSummaryConnection!
-  movieById(id: UUID!): Movie
+  movieById(id: UUID!): MovieDetails
+  currentUser: User
+}
+
+type Mutation {
+  createMovieReview(input: CreateMovieReviewInput): CreateMovieReviewPayload
+}
+
+input CreateMovieReviewInput {
+  title: String!
+  body: String
+  rating: Int
+  movieId: UUID!
+  userReviewerId: UUID!
+}
+
+type CreateMovieReviewPayload {
+  movieReview: MovieReview
 }
 
 scalar UUID
