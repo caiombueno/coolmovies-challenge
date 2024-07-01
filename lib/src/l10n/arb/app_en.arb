@@ -27,5 +27,7 @@
     }
   },
   "reviewsSectionTitle": "Reviews",
-  "addReviewButtonLabel": "Add Review"
+  "addReviewButtonLabel": "Add Review",
+  "noMovieReviewsFoundExceptionMessage": "No reviews found.",
+  "movieReviewsFetchFailureExceptionMessage": "Failed to fetch movie reviews.",
 }

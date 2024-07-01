@@ -72,3 +72,21 @@ class MovieDetailsFetchFailureException extends DataException {
   String getMessage(BuildContext context) =>
       context.l10n.movieDetailsFetchFailureExceptionMessage;
 }
+
+class NoMovieReviewsFoundException extends DataException {
+  const NoMovieReviewsFoundException() : super('no-movie-reviews-found');
+
+  @override
+  String getMessage(BuildContext context) =>
+      context.l10n.noMovieReviewsFoundExceptionMessage;
+}
+
+class MovieReviewsFetchFailureException extends DataException {
+  const MovieReviewsFetchFailureException()
+      : super('movie-reviews-fetch-failure');
+
+  @override
+  String getMessage(BuildContext context) =>
+      context.l10n.movieReviewsFetchFailureExceptionMessage;
+}
+

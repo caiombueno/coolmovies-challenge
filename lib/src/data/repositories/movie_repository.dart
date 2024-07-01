@@ -12,18 +12,18 @@ class MovieRepository {
       getMovieSummaryList() async {
     final result = await _movieDataSource.getMovieSummaryList();
     return result.fold(
-      (l) {
-        DataException exception;
+      (exception) {
+        DataException dataException;
 
-        if (l is EmptyResultException) {
-          exception = const NoMovieSummaryListFoundException();
+        if (exception is EmptyResultException) {
+          dataException = const NoMovieSummaryListFoundException();
         } else {
-          exception = const MovieSummaryListFetchFailureException();
+          dataException = const MovieSummaryListFetchFailureException();
         }
 
-        return Left(exception);
+        return Left(dataException);
       },
-      (r) => Right(r),
+      (summaries) => Right(summaries),
     );
   }
 
@@ -31,18 +31,40 @@ class MovieRepository {
       {required String movieId}) async {
     final result = await _movieDataSource.getMovieDetails(movieId: movieId);
     return result.fold(
-      (l) {
-        DataException exception;
+      (exception) {
+        DataException dataException;
 
-        if (l is EmptyResultException) {
-          exception = const NoMovieDetailsFoundException();
+        if (exception is EmptyResultException) {
+          dataException = const NoMovieDetailsFoundException();
         } else {
-          exception = const MovieDetailsFetchFailureException();
+          dataException = const MovieDetailsFetchFailureException();
         }
 
-        return Left(exception);
+        return Left(dataException);
       },
-      (r) => Right(r),
+      (movieDetails) => Right(movieDetails),
+    );
+  }
+
+  Future<Either<DataException, MovieReviewList>> getMovieReviews(
+      {required String movieId}) async {
+    final result = await _movieDataSource.getMovieReviews(movieId: movieId);
+
+    return result.fold(
+      (exception) {
+        DataException dataException;
+
+        if (exception is EmptyResultException) {
+          dataException = const NoMovieReviewsFoundException();
+        } else {
+          dataException = const MovieReviewsFetchFailureException();
+        }
+
+        return Left(dataException);
+      },
+      (reviews) => Right(reviews),
+    );
+  }
     );
   }
 }
