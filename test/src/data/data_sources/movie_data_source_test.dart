@@ -465,14 +465,11 @@ void main() {
       });
     });
 
-    group('getCurrentUser', () {
-      setUpAll(() =>
-          registerFallbackValue(FakeQueryOptions<Query$GetCurrentUser>()));
-
+    group('createMovieReview', () {
       Future<QueryResult<Query$GetCurrentUser>> getCurrentUserQuery() =>
           makeQuery<Query$GetCurrentUser>();
 
-      QueryResult<Query$GetCurrentUser> getMockQueryResult(
+      QueryResult<Query$GetCurrentUser> getCurrentUserIdMockQueryResult(
         Map<String, dynamic>? data, {
         bool hasException = false,
       }) =>
@@ -481,102 +478,25 @@ void main() {
             hasException: hasException,
           );
 
-      void verifySingleCallAndNoMoreInteractions() =>
-          verifySingleCallAndNoMoreInteractionsToQuery(getCurrentUserQuery);
+      setUpAll(() {
+        registerFallbackValue(
+            FakeMutationOptions<Mutation$CreateMovieReview>());
 
-      const currentUser = User(userId: 'user1', name: 'User 1');
+        registerFallbackValue(FakeQueryOptions<Query$GetCurrentUser>());
 
-      final jsonData = {
-        "__typename": "Query",
-        "currentUser": {
-          "__typename": "User",
-          "id": currentUser.userId,
-          "name": currentUser.name
-        }
-      };
+        const currentUser = User(userId: 'user1', name: 'User 1');
 
-      Future<Either<Exception, User>> getCurrentUser() =>
-          dataSource.getCurrentUser();
-
-      test('should return current user when response is successful', () async {
-        // arrange
-        final mockQueryResult = getMockQueryResult(jsonData);
-
-        when(getCurrentUserQuery).thenAnswer((_) async => mockQueryResult);
-
-        // act
-        final userEither = await getCurrentUser();
-
-        // assert
-        expectRight<Exception, User>(userEither, currentUser);
-        verifySingleCallAndNoMoreInteractions();
+        final currentUsedIdJsonData = {
+          "__typename": "Query",
+          "currentUser": {
+            "__typename": "User",
+            "id": currentUser.userId,
+            "name": currentUser.name
+          }
+        };
+        when(getCurrentUserQuery).thenAnswer((_) async =>
+            getCurrentUserIdMockQueryResult(currentUsedIdJsonData));
       });
-
-      test('should throw EmptyResultException when response is empty',
-          () async {
-        // arrange
-        final queryResult = getMockQueryResult({});
-
-        when(getCurrentUserQuery).thenAnswer((_) async => queryResult);
-
-        // act
-        final userEither = await getCurrentUser();
-
-        // assert
-        expectLeft<Exception, User, EmptyResultException>(userEither);
-        verifySingleCallAndNoMoreInteractions();
-      });
-
-      test('should throw EmptyResultException when response is null', () async {
-        // arrange
-        final queryResult = getMockQueryResult(null);
-
-        when(getCurrentUserQuery).thenAnswer((_) async => queryResult);
-
-        // act
-        final userEither = await getCurrentUser();
-
-        // assert
-        expectLeft<Exception, User, EmptyResultException>(userEither);
-        verifySingleCallAndNoMoreInteractions();
-      });
-
-      test(
-          'should throw ServerCommunicationFailureException when there is a query error',
-          () async {
-        // arrange
-        when(getCurrentUserQuery).thenThrow(Exception());
-
-        // act
-        final userEither = await getCurrentUser();
-
-        // assert
-        expectLeft<Exception, User, ServerCommunicationFailureException>(
-            userEither);
-        verifySingleCallAndNoMoreInteractions();
-      });
-
-      test(
-          'should throw ServerCommunicationFailureException when hasException is true',
-          () async {
-        // arrange
-        final queryResult = getMockQueryResult(jsonData, hasException: true);
-
-        when(getCurrentUserQuery).thenAnswer((_) async => queryResult);
-
-        // act
-        final userEither = await getCurrentUser();
-
-        // assert
-        expectLeft<Exception, User, ServerCommunicationFailureException>(
-            userEither);
-        verifySingleCallAndNoMoreInteractions();
-      });
-    });
-
-    group('createMovieReview', () {
-      setUpAll(() => registerFallbackValue(
-          FakeMutationOptions<Mutation$CreateMovieReview>()));
 
       Future<QueryResult<Mutation$CreateMovieReview>>
           createMovieReviewMutation() =>
@@ -591,9 +511,17 @@ void main() {
             hasException: hasException,
           );
 
-      void verifySingleCallAndNoMoreInteractions() =>
-          verifySingleCallAndNoMoreInteractionsToQuery(
-              createMovieReviewMutation);
+      Future<Either<Exception, MovieReview>> createMovieReview() =>
+          dataSource.createMovieReview(
+            movieId: '',
+            title: '',
+          );
+
+      void verifySingleCallsAndNoMoreInteractions() {
+        verify(getCurrentUserQuery).called(1);
+        verify(createMovieReviewMutation).called(1);
+        verifyNoMoreInteractions(graphQlClient);
+      }
 
       const movieReview = MovieReview(
         reviewId: '1',
@@ -622,14 +550,8 @@ void main() {
         },
       };
 
-      Future<Either<Exception, MovieReview>> createMovieReview() =>
-          dataSource.createMovieReview(
-            movieId: '',
-            userReviewerId: '',
-            title: '',
-          );
-
-      test('should return current user when response is successful', () async {
+      test('should return created movie review when response is successful',
+          () async {
         // arrange
         final mockQueryResult = getMockQueryResult(jsonData);
 
@@ -641,7 +563,7 @@ void main() {
 
         // assert
         expectRight<Exception, MovieReview>(movieReviewEither, movieReview);
-        verifySingleCallAndNoMoreInteractions();
+        verifySingleCallsAndNoMoreInteractions();
       });
 
       test('should throw EmptyResultException when response is empty',
@@ -657,7 +579,7 @@ void main() {
         // assert
         expectLeft<Exception, MovieReview, EmptyResultException>(
             movieReviewEither);
-        verifySingleCallAndNoMoreInteractions();
+        verifySingleCallsAndNoMoreInteractions();
       });
 
       test('should throw EmptyResultException when response is null', () async {
@@ -672,7 +594,7 @@ void main() {
         // assert
         expectLeft<Exception, MovieReview, EmptyResultException>(
             movieReviewEither);
-        verifySingleCallAndNoMoreInteractions();
+        verifySingleCallsAndNoMoreInteractions();
       });
 
       test(
@@ -687,7 +609,7 @@ void main() {
         // assert
         expectLeft<Exception, MovieReview, ServerCommunicationFailureException>(
             movieReviewEither);
-        verifySingleCallAndNoMoreInteractions();
+        verifySingleCallsAndNoMoreInteractions();
       });
 
       test(
@@ -704,7 +626,7 @@ void main() {
         // assert
         expectLeft<Exception, MovieReview, ServerCommunicationFailureException>(
             movieReviewEither);
-        verifySingleCallAndNoMoreInteractions();
+        verifySingleCallsAndNoMoreInteractions();
       });
     });
   });

@@ -118,7 +118,7 @@ class MovieDataSource {
     }
   }
 
-  Future<Either<Exception, User>> getCurrentUser() async {
+  Future<Either<Exception, String>> _getCurrentUserId() async {
     try {
       final result = await _client.query$GetCurrentUser().onError(
           (_, __) => throw const ServerCommunicationFailureException());
@@ -131,7 +131,7 @@ class MovieDataSource {
 
       if (data == null || data.isEmpty) throw const EmptyResultException();
 
-      final currentUser = _MovieDataSourceParser.parseCurrentUser(data);
+      final currentUser = _MovieDataSourceParser.parseCurrentUserId(data);
 
       return currentUser.fold(
         (exception) => throw exception,
@@ -146,12 +146,17 @@ class MovieDataSource {
 
   Future<Either<Exception, MovieReview>> createMovieReview({
     required String movieId,
-    required String userReviewerId,
     required String title,
     String? body,
     int? rating,
   }) async {
     try {
+      final userReviewerId =
+          await _getCurrentUserId().then((value) => value.fold(
+                (Exception exception) => throw exception,
+                (id) => id,
+              ));
+
       final result = await _client
           .mutate$CreateMovieReview(
             Options$Mutation$CreateMovieReview(
@@ -223,19 +228,14 @@ class _MovieDataSourceParser {
     );
   }
 
-  static Either<DataFormatFailureException, User> parseCurrentUser(
+  static Either<DataFormatFailureException, String> parseCurrentUserId(
       Map<String, dynamic> data) {
     return Either.tryCatch(
       () {
         final parsedData = Query$GetCurrentUser.fromJson(data).currentUser;
         if (parsedData == null) throw const DataFormatFailureException();
 
-        final currentUser = User(
-          userId: parsedData.id,
-          name: parsedData.name,
-        );
-
-        return currentUser;
+        return parsedData.id;
       },
       (_, __) => const DataFormatFailureException(),
     );
