@@ -18,3 +18,16 @@ class MovieReview extends Equatable {
   @override
   List<Object?> get props => [reviewId, title, body, reviewer, rating];
 }
+
+class MovieReviewList extends Equatable {
+  final String movieId;
+  final List<MovieReview> reviews;
+
+  const MovieReviewList({
+    required this.movieId,
+    this.reviews = const [],
+  });
+
+  @override
+  List<Object?> get props => [movieId, reviews];
+}
