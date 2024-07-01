@@ -65,6 +65,23 @@ class MovieRepository {
       (reviews) => Right(reviews),
     );
   }
+
+  Future<Either<AppException, MovieReview>> createMovieReview({
+    required String movieId,
+    required String title,
+    String? body,
+    int? rating,
+  }) async {
+    final result = await _movieDataSource.createMovieReview(
+      movieId: movieId,
+      title: title,
+      body: body,
+      rating: rating,
+    );
+
+    return result.fold(
+      (_) => const Left(MovieReviewCreationFailureException()),
+      (review) => Right(review),
     );
   }
 }

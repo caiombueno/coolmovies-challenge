@@ -90,3 +90,11 @@ class MovieReviewsFetchFailureException extends DataException {
       context.l10n.movieReviewsFetchFailureExceptionMessage;
 }
 
+class MovieReviewCreationFailureException extends DataException {
+  const MovieReviewCreationFailureException()
+      : super('movie-review-creation-failure');
+
+  @override
+  String getMessage(BuildContext context) =>
+      context.l10n.movieReviewCreationFailureExceptionMessage;
+}

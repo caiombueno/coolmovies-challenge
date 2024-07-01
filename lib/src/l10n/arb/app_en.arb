@@ -30,4 +30,5 @@
   "addReviewButtonLabel": "Add Review",
   "noMovieReviewsFoundExceptionMessage": "No reviews found.",
   "movieReviewsFetchFailureExceptionMessage": "Failed to fetch movie reviews.",
+  "movieReviewCreationFailureExceptionMessage": "Failed to create movie review."
 }
