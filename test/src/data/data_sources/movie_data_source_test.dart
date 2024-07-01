@@ -20,6 +20,8 @@ void main() {
 
     Future<QueryResult<Q>> makeQuery<Q>() => graphQlClient.query(any());
 
+    Future<QueryResult<Q>> makeMutation<Q>() => graphQlClient.mutate(any());
+
     QueryResult<Q> getMockQueryResultOfType<Q>(
       Map<String, dynamic>? data, {
       bool hasException = false,
@@ -568,6 +570,140 @@ void main() {
         // assert
         expectLeft<Exception, User, ServerCommunicationFailureException>(
             userEither);
+        verifySingleCallAndNoMoreInteractions();
+      });
+    });
+
+    group('createMovieReview', () {
+      setUpAll(() => registerFallbackValue(
+          FakeMutationOptions<Mutation$CreateMovieReview>()));
+
+      Future<QueryResult<Mutation$CreateMovieReview>>
+          createMovieReviewMutation() =>
+              makeMutation<Mutation$CreateMovieReview>();
+
+      QueryResult<Mutation$CreateMovieReview> getMockQueryResult(
+        Map<String, dynamic>? data, {
+        bool hasException = false,
+      }) =>
+          getMockQueryResultOfType<Mutation$CreateMovieReview>(
+            data,
+            hasException: hasException,
+          );
+
+      void verifySingleCallAndNoMoreInteractions() =>
+          verifySingleCallAndNoMoreInteractionsToQuery(
+              createMovieReviewMutation);
+
+      const movieReview = MovieReview(
+        reviewId: '1',
+        title: 'Review 1',
+        body: 'Review body',
+        rating: 4,
+        reviewer: User(userId: '1', name: 'Reviewer 1'),
+      );
+
+      final jsonData = {
+        "__typename": "Query",
+        "createMovieReview": {
+          "__typename": "CreateMovieReviewPayload",
+          "movieReview": {
+            "__typename": "MovieReview",
+            "id": movieReview.reviewId,
+            "title": movieReview.title,
+            "body": movieReview.body,
+            "rating": movieReview.rating,
+            "userByUserReviewerId": {
+              "__typename": "User",
+              "id": movieReview.reviewer?.userId,
+              "name": movieReview.reviewer?.name,
+            },
+          },
+        },
+      };
+
+      Future<Either<Exception, MovieReview>> createMovieReview() =>
+          dataSource.createMovieReview(
+            movieId: '',
+            userReviewerId: '',
+            title: '',
+          );
+
+      test('should return current user when response is successful', () async {
+        // arrange
+        final mockQueryResult = getMockQueryResult(jsonData);
+
+        when(createMovieReviewMutation)
+            .thenAnswer((_) async => mockQueryResult);
+
+        // act
+        final movieReviewEither = await createMovieReview();
+
+        // assert
+        expectRight<Exception, MovieReview>(movieReviewEither, movieReview);
+        verifySingleCallAndNoMoreInteractions();
+      });
+
+      test('should throw EmptyResultException when response is empty',
+          () async {
+        // arrange
+        final queryResult = getMockQueryResult({});
+
+        when(createMovieReviewMutation).thenAnswer((_) async => queryResult);
+
+        // act
+        final movieReviewEither = await createMovieReview();
+
+        // assert
+        expectLeft<Exception, MovieReview, EmptyResultException>(
+            movieReviewEither);
+        verifySingleCallAndNoMoreInteractions();
+      });
+
+      test('should throw EmptyResultException when response is null', () async {
+        // arrange
+        final queryResult = getMockQueryResult(null);
+
+        when(createMovieReviewMutation).thenAnswer((_) async => queryResult);
+
+        // act
+        final movieReviewEither = await createMovieReview();
+
+        // assert
+        expectLeft<Exception, MovieReview, EmptyResultException>(
+            movieReviewEither);
+        verifySingleCallAndNoMoreInteractions();
+      });
+
+      test(
+          'should throw ServerCommunicationFailureException when there is a mutation error',
+          () async {
+        // arrange
+        when(createMovieReviewMutation).thenThrow(Exception());
+
+        // act
+        final movieReviewEither = await createMovieReview();
+
+        // assert
+        expectLeft<Exception, MovieReview, ServerCommunicationFailureException>(
+            movieReviewEither);
+        verifySingleCallAndNoMoreInteractions();
+      });
+
+      test(
+          'should throw ServerCommunicationFailureException when hasException is true',
+          () async {
+        // arrange
+        final queryResult = getMockQueryResult(jsonData, hasException: true);
+
+        when(createMovieReviewMutation).thenAnswer((_) async => queryResult);
+
+        // act
+        final movieReviewEither = await createMovieReview();
+
+        // assert
+        expectLeft<Exception, MovieReview, ServerCommunicationFailureException>(
+            movieReviewEither);
         verifySingleCallAndNoMoreInteractions();
       });
     });
