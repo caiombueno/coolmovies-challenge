@@ -66,8 +66,8 @@ class MovieRepository {
     );
   }
 
-  Future<Either<AppException, MovieReview>> createMovieReview({
-    required String movieId,
+  Future<Either<AppException, Unit>> createMovieReview({
+    required MovieID movieId,
     required String title,
     String? body,
     int? rating,
@@ -81,7 +81,7 @@ class MovieRepository {
 
     return result.fold(
       (_) => const Left(MovieReviewCreationFailureException()),
-      (review) => Right(review),
+      (unit) => Right(unit),
     );
   }
 }

@@ -16,13 +16,6 @@ mutation CreateMovieReview(
   {
     movieReview {
       id
-      title
-      body
-      rating
-      userByUserReviewerId {
-        id
-        name
-      }
     }
   }
 }

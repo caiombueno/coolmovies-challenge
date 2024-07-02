@@ -203,7 +203,7 @@ void main() {
         verifyNoMoreInteractions(movieDataSource);
       }
 
-      When<Future<Either<Exception, MovieReview>>> stubDataSourceCall() =>
+      When<Future<Either<Exception, Unit>>> stubDataSourceCall() =>
           when(() => movieDataSource.createMovieReview(
                 movieId: any(named: 'movieId'),
                 title: any(named: 'title'),
@@ -211,21 +211,19 @@ void main() {
                 rating: any(named: 'rating'),
               ));
 
-      Future<Either<AppException, MovieReview>> createMovieReview() =>
+      Future<Either<AppException, Unit>> createMovieReview() =>
           movieRepository.createMovieReview(
             movieId: 'movieId',
             title: 'Test Review',
           );
 
-      test('should return MovieReview when data source call is successful',
-          () async {
+      test('should return unit when data source call is successful', () async {
         // arrange
-        const movieReview = MovieReview(reviewId: 'reviewId');
-        stubDataSourceCall().thenAnswer((_) async => const Right(movieReview));
+        stubDataSourceCall().thenAnswer((_) async => const Right(unit));
         // act
         final result = await createMovieReview();
         // assert
-        expectRight<AppException, MovieReview>(result, movieReview);
+        expectRight<AppException, Unit>(result, unit);
         verifySingleCallAndNoMoreInteractions();
       });
 
@@ -237,8 +235,8 @@ void main() {
         // act
         final result = await createMovieReview();
         // assert
-        expectLeft<AppException, MovieReview,
-            MovieReviewCreationFailureException>(result);
+        expectLeft<AppException, Unit, MovieReviewCreationFailureException>(
+            result);
         verifySingleCallAndNoMoreInteractions();
       });
     });

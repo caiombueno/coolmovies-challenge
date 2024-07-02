@@ -462,56 +462,6 @@ const documentNodeMutationCreateMovieReview = DocumentNode(definitions: [
                 selectionSet: null,
               ),
               FieldNode(
-                name: NameNode(value: 'title'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'body'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'rating'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: null,
-              ),
-              FieldNode(
-                name: NameNode(value: 'userByUserReviewerId'),
-                alias: null,
-                arguments: [],
-                directives: [],
-                selectionSet: SelectionSetNode(selections: [
-                  FieldNode(
-                    name: NameNode(value: 'id'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
-                    name: NameNode(value: 'name'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                  FieldNode(
-                    name: NameNode(value: '__typename'),
-                    alias: null,
-                    arguments: [],
-                    directives: [],
-                    selectionSet: null,
-                  ),
-                ]),
-              ),
-              FieldNode(
                 name: NameNode(value: '__typename'),
                 alias: null,
                 arguments: [],
@@ -794,44 +744,20 @@ class _CopyWithStubImpl$Mutation$CreateMovieReview$createMovieReview<TRes>
 class Mutation$CreateMovieReview$createMovieReview$movieReview {
   Mutation$CreateMovieReview$createMovieReview$movieReview({
     required this.id,
-    this.title,
-    this.body,
-    this.rating,
-    this.userByUserReviewerId,
     this.$__typename = 'MovieReview',
   });
 
   factory Mutation$CreateMovieReview$createMovieReview$movieReview.fromJson(
       Map<String, dynamic> json) {
     final l$id = json['id'];
-    final l$title = json['title'];
-    final l$body = json['body'];
-    final l$rating = json['rating'];
-    final l$userByUserReviewerId = json['userByUserReviewerId'];
     final l$$__typename = json['__typename'];
     return Mutation$CreateMovieReview$createMovieReview$movieReview(
       id: (l$id as String),
-      title: (l$title as String?),
-      body: (l$body as String?),
-      rating: (l$rating as num?)?.toDouble(),
-      userByUserReviewerId: l$userByUserReviewerId == null
-          ? null
-          : Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId
-              .fromJson((l$userByUserReviewerId as Map<String, dynamic>)),
       $__typename: (l$$__typename as String),
     );
   }
 
   final String id;
-
-  final String? title;
-
-  final String? body;
-
-  final double? rating;
-
-  final Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId?
-      userByUserReviewerId;
 
   final String $__typename;
 
@@ -839,14 +765,6 @@ class Mutation$CreateMovieReview$createMovieReview$movieReview {
     final resultData = <String, dynamic>{};
     final l$id = id;
     resultData['id'] = l$id;
-    final l$title = title;
-    resultData['title'] = l$title;
-    final l$body = body;
-    resultData['body'] = l$body;
-    final l$rating = rating;
-    resultData['rating'] = l$rating;
-    final l$userByUserReviewerId = userByUserReviewerId;
-    resultData['userByUserReviewerId'] = l$userByUserReviewerId?.toJson();
     final l$$__typename = $__typename;
     resultData['__typename'] = l$$__typename;
     return resultData;
@@ -855,17 +773,9 @@ class Mutation$CreateMovieReview$createMovieReview$movieReview {
   @override
   int get hashCode {
     final l$id = id;
-    final l$title = title;
-    final l$body = body;
-    final l$rating = rating;
-    final l$userByUserReviewerId = userByUserReviewerId;
     final l$$__typename = $__typename;
     return Object.hashAll([
       l$id,
-      l$title,
-      l$body,
-      l$rating,
-      l$userByUserReviewerId,
       l$$__typename,
     ]);
   }
@@ -882,26 +792,6 @@ class Mutation$CreateMovieReview$createMovieReview$movieReview {
     final l$id = id;
     final lOther$id = other.id;
     if (l$id != lOther$id) {
-      return false;
-    }
-    final l$title = title;
-    final lOther$title = other.title;
-    if (l$title != lOther$title) {
-      return false;
-    }
-    final l$body = body;
-    final lOther$body = other.body;
-    if (l$body != lOther$body) {
-      return false;
-    }
-    final l$rating = rating;
-    final lOther$rating = other.rating;
-    if (l$rating != lOther$rating) {
-      return false;
-    }
-    final l$userByUserReviewerId = userByUserReviewerId;
-    final lOther$userByUserReviewerId = other.userByUserReviewerId;
-    if (l$userByUserReviewerId != lOther$userByUserReviewerId) {
       return false;
     }
     final l$$__typename = $__typename;
@@ -938,15 +828,8 @@ abstract class CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview
 
   TRes call({
     String? id,
-    String? title,
-    String? body,
-    double? rating,
-    Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId?
-        userByUserReviewerId,
     String? $__typename,
   });
-  CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId<
-      TRes> get userByUserReviewerId;
 }
 
 class _CopyWithImpl$Mutation$CreateMovieReview$createMovieReview$movieReview<
@@ -969,36 +852,14 @@ class _CopyWithImpl$Mutation$CreateMovieReview$createMovieReview$movieReview<
   @override
   TRes call({
     Object? id = _undefined,
-    Object? title = _undefined,
-    Object? body = _undefined,
-    Object? rating = _undefined,
-    Object? userByUserReviewerId = _undefined,
     Object? $__typename = _undefined,
   }) =>
       _then(Mutation$CreateMovieReview$createMovieReview$movieReview(
         id: id == _undefined || id == null ? _instance.id : (id as String),
-        title: title == _undefined ? _instance.title : (title as String?),
-        body: body == _undefined ? _instance.body : (body as String?),
-        rating: rating == _undefined ? _instance.rating : (rating as double?),
-        userByUserReviewerId: userByUserReviewerId == _undefined
-            ? _instance.userByUserReviewerId
-            : (userByUserReviewerId
-                as Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId?),
         $__typename: $__typename == _undefined || $__typename == null
             ? _instance.$__typename
             : ($__typename as String),
       ));
-
-  @override
-  CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId<
-      TRes> get userByUserReviewerId {
-    final local$userByUserReviewerId = _instance.userByUserReviewerId;
-    return local$userByUserReviewerId == null
-        ? CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId
-            .stub(_then(_instance))
-        : CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId(
-            local$userByUserReviewerId, (e) => call(userByUserReviewerId: e));
-  }
 }
 
 class _CopyWithStubImpl$Mutation$CreateMovieReview$createMovieReview$movieReview<
@@ -1014,181 +875,6 @@ class _CopyWithStubImpl$Mutation$CreateMovieReview$createMovieReview$movieReview
   @override
   call({
     String? id,
-    String? title,
-    String? body,
-    double? rating,
-    Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId?
-        userByUserReviewerId,
-    String? $__typename,
-  }) =>
-      _res;
-
-  @override
-  CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId<
-          TRes>
-      get userByUserReviewerId =>
-          CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId
-              .stub(_res);
-}
-
-class Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId {
-  Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId({
-    required this.id,
-    this.name,
-    this.$__typename = 'User',
-  });
-
-  factory Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId.fromJson(
-      Map<String, dynamic> json) {
-    final l$id = json['id'];
-    final l$name = json['name'];
-    final l$$__typename = json['__typename'];
-    return Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId(
-      id: (l$id as String),
-      name: (l$name as String?),
-      $__typename: (l$$__typename as String),
-    );
-  }
-
-  final String id;
-
-  final String? name;
-
-  final String $__typename;
-
-  Map<String, dynamic> toJson() {
-    final resultData = <String, dynamic>{};
-    final l$id = id;
-    resultData['id'] = l$id;
-    final l$name = name;
-    resultData['name'] = l$name;
-    final l$$__typename = $__typename;
-    resultData['__typename'] = l$$__typename;
-    return resultData;
-  }
-
-  @override
-  int get hashCode {
-    final l$id = id;
-    final l$name = name;
-    final l$$__typename = $__typename;
-    return Object.hashAll([
-      l$id,
-      l$name,
-      l$$__typename,
-    ]);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    if (other
-            is! Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId ||
-        runtimeType != other.runtimeType) {
-      return false;
-    }
-    final l$id = id;
-    final lOther$id = other.id;
-    if (l$id != lOther$id) {
-      return false;
-    }
-    final l$name = name;
-    final lOther$name = other.name;
-    if (l$name != lOther$name) {
-      return false;
-    }
-    final l$$__typename = $__typename;
-    final lOther$$__typename = other.$__typename;
-    if (l$$__typename != lOther$$__typename) {
-      return false;
-    }
-    return true;
-  }
-}
-
-extension UtilityExtension$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId
-    on Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId {
-  CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId<
-          Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId>
-      get copyWith =>
-          CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId(
-            this,
-            (i) => i,
-          );
-}
-
-abstract class CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId<
-    TRes> {
-  factory CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId(
-    Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId
-        instance,
-    TRes Function(
-            Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId)
-        then,
-  ) = _CopyWithImpl$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId;
-
-  factory CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId.stub(
-          TRes res) =
-      _CopyWithStubImpl$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId;
-
-  TRes call({
-    String? id,
-    String? name,
-    String? $__typename,
-  });
-}
-
-class _CopyWithImpl$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId<
-        TRes>
-    implements
-        CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId<
-            TRes> {
-  _CopyWithImpl$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId(
-    this._instance,
-    this._then,
-  );
-
-  final Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId
-      _instance;
-
-  final TRes Function(
-          Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId)
-      _then;
-
-  static const _undefined = <dynamic, dynamic>{};
-
-  @override
-  TRes call({
-    Object? id = _undefined,
-    Object? name = _undefined,
-    Object? $__typename = _undefined,
-  }) =>
-      _then(
-          Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId(
-        id: id == _undefined || id == null ? _instance.id : (id as String),
-        name: name == _undefined ? _instance.name : (name as String?),
-        $__typename: $__typename == _undefined || $__typename == null
-            ? _instance.$__typename
-            : ($__typename as String),
-      ));
-}
-
-class _CopyWithStubImpl$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId<
-        TRes>
-    implements
-        CopyWith$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId<
-            TRes> {
-  _CopyWithStubImpl$Mutation$CreateMovieReview$createMovieReview$movieReview$userByUserReviewerId(
-      this._res);
-
-  final TRes _res;
-
-  @override
-  call({
-    String? id,
-    String? name,
     String? $__typename,
   }) =>
       _res;

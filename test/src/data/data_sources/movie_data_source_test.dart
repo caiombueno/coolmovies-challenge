@@ -192,7 +192,6 @@ void main() {
         title: 'Movie 1',
         imgUrl: 'img1.png',
         releaseDate: '2021-01-01',
-        reviews: [MovieReview(reviewId: '1')],
         director: MovieDirector(directorId: '1', name: 'Director 1'),
       );
 
@@ -209,15 +208,6 @@ void main() {
             "id": movieDetails.director?.directorId,
             "name": movieDetails.director?.name,
           },
-          "movieReviewsByMovieId": {
-            "__typename": "MovieReviewConnection",
-            "nodes": [
-              {
-                "__typename": "MovieReview",
-                "id": movieDetails.reviews.first.reviewId,
-              }
-            ]
-          }
         }
       };
 
@@ -502,7 +492,7 @@ void main() {
           createMovieReviewMutation() =>
               makeMutation<Mutation$CreateMovieReview>();
 
-      QueryResult<Mutation$CreateMovieReview> getMockQueryResult(
+      QueryResult<Mutation$CreateMovieReview> getMockMutationResult(
         Map<String, dynamic>? data, {
         bool hasException = false,
       }) =>
@@ -511,11 +501,8 @@ void main() {
             hasException: hasException,
           );
 
-      Future<Either<Exception, MovieReview>> createMovieReview() =>
-          dataSource.createMovieReview(
-            movieId: '',
-            title: '',
-          );
+      Future<Either<Exception, Unit>> createMovieReview() =>
+          dataSource.createMovieReview(movieId: '', title: '');
 
       void verifySingleCallsAndNoMoreInteractions() {
         verify(getCurrentUserQuery).called(1);
@@ -523,37 +510,17 @@ void main() {
         verifyNoMoreInteractions(graphQlClient);
       }
 
-      const movieReview = MovieReview(
-        reviewId: '1',
-        title: 'Review 1',
-        body: 'Review body',
-        rating: 4,
-        reviewer: User(userId: '1', name: 'Reviewer 1'),
-      );
-
       final jsonData = {
         "__typename": "Query",
         "createMovieReview": {
           "__typename": "CreateMovieReviewPayload",
-          "movieReview": {
-            "__typename": "MovieReview",
-            "id": movieReview.reviewId,
-            "title": movieReview.title,
-            "body": movieReview.body,
-            "rating": movieReview.rating,
-            "userByUserReviewerId": {
-              "__typename": "User",
-              "id": movieReview.reviewer?.userId,
-              "name": movieReview.reviewer?.name,
-            },
-          },
+          "movieReview": {"__typename": "MovieReview", "id": ''},
         },
       };
 
-      test('should return created movie review when response is successful',
-          () async {
+      test('should return unit when response is successful', () async {
         // arrange
-        final mockQueryResult = getMockQueryResult(jsonData);
+        final mockQueryResult = getMockMutationResult(jsonData);
 
         when(createMovieReviewMutation)
             .thenAnswer((_) async => mockQueryResult);
@@ -562,14 +529,14 @@ void main() {
         final movieReviewEither = await createMovieReview();
 
         // assert
-        expectRight<Exception, MovieReview>(movieReviewEither, movieReview);
+        expectRight<Exception, Unit>(movieReviewEither, unit);
         verifySingleCallsAndNoMoreInteractions();
       });
 
       test('should throw EmptyResultException when response is empty',
           () async {
         // arrange
-        final queryResult = getMockQueryResult({});
+        final queryResult = getMockMutationResult({});
 
         when(createMovieReviewMutation).thenAnswer((_) async => queryResult);
 
@@ -577,14 +544,13 @@ void main() {
         final movieReviewEither = await createMovieReview();
 
         // assert
-        expectLeft<Exception, MovieReview, EmptyResultException>(
-            movieReviewEither);
+        expectLeft<Exception, Unit, EmptyResultException>(movieReviewEither);
         verifySingleCallsAndNoMoreInteractions();
       });
 
       test('should throw EmptyResultException when response is null', () async {
         // arrange
-        final queryResult = getMockQueryResult(null);
+        final queryResult = getMockMutationResult(null);
 
         when(createMovieReviewMutation).thenAnswer((_) async => queryResult);
 
@@ -592,8 +558,7 @@ void main() {
         final movieReviewEither = await createMovieReview();
 
         // assert
-        expectLeft<Exception, MovieReview, EmptyResultException>(
-            movieReviewEither);
+        expectLeft<Exception, Unit, EmptyResultException>(movieReviewEither);
         verifySingleCallsAndNoMoreInteractions();
       });
 
@@ -607,7 +572,7 @@ void main() {
         final movieReviewEither = await createMovieReview();
 
         // assert
-        expectLeft<Exception, MovieReview, ServerCommunicationFailureException>(
+        expectLeft<Exception, Unit, ServerCommunicationFailureException>(
             movieReviewEither);
         verifySingleCallsAndNoMoreInteractions();
       });
@@ -616,7 +581,7 @@ void main() {
           'should throw ServerCommunicationFailureException when hasException is true',
           () async {
         // arrange
-        final queryResult = getMockQueryResult(jsonData, hasException: true);
+        final queryResult = getMockMutationResult(jsonData, hasException: true);
 
         when(createMovieReviewMutation).thenAnswer((_) async => queryResult);
 
@@ -624,7 +589,7 @@ void main() {
         final movieReviewEither = await createMovieReview();
 
         // assert
-        expectLeft<Exception, MovieReview, ServerCommunicationFailureException>(
+        expectLeft<Exception, Unit, ServerCommunicationFailureException>(
             movieReviewEither);
         verifySingleCallsAndNoMoreInteractions();
       });

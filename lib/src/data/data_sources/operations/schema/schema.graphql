@@ -4,7 +4,7 @@ type MovieDetails {
   releaseDate: String
   imgUrl: String
   movieDirectorByMovieDirectorId: MovieDirector
-  movieReviewsByMovieId: MovieReviewConnection
+  movieReviewsByMovieId: MovieReviewConnection 
 }
 
 type MovieDirector {
