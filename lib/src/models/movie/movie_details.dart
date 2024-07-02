@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 class MovieDetails extends Equatable {
   final MovieID movieId;
   final String? title, imgUrl, releaseDate;
-  final List<MovieReview> reviews;
   final MovieDirector? director;
 
   const MovieDetails({
@@ -14,7 +13,6 @@ class MovieDetails extends Equatable {
     this.imgUrl,
     this.releaseDate,
     this.director,
-    this.reviews = const [],
   });
 
   String? get formattedReleaseDate => (releaseDate != null)
@@ -22,6 +20,5 @@ class MovieDetails extends Equatable {
       : null;
 
   @override
-  List<Object?> get props =>
-      [movieId, title, imgUrl, releaseDate, director, reviews];
+  List<Object?> get props => [movieId, title, imgUrl, releaseDate, director];
 }

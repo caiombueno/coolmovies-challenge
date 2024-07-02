@@ -145,8 +145,8 @@ class MovieDataSource {
     }
   }
 
-  Future<Either<Exception, MovieReview>> createMovieReview({
-    required String movieId,
+  Future<Either<Exception, Unit>> createMovieReview({
+    required MovieID movieId,
     required String title,
     String? body,
     int? rating,
@@ -181,13 +181,7 @@ class MovieDataSource {
 
       if (data == null || data.isEmpty) throw const EmptyResultException();
 
-      final createdMovieReview =
-          _MovieDataSourceParser.parseCreatedMovieReview(data);
-
-      return createdMovieReview.fold(
-        (exception) => throw exception,
-        (movieReview) => Either.right(movieReview),
-      );
+      return Either.right(unit);
     } on AppException catch (e) {
       return Either.left(e);
     } catch (e) {
@@ -197,38 +191,6 @@ class MovieDataSource {
 }
 
 class _MovieDataSourceParser {
-  static Either<DataFormatFailureException, MovieReview>
-      parseCreatedMovieReview(Map<String, dynamic> data) {
-    return Either.tryCatch(
-      () {
-        final parsedData = Mutation$CreateMovieReview.fromJson(data)
-            .createMovieReview
-            ?.movieReview;
-
-        final parsedReviewerData = parsedData?.userByUserReviewerId;
-        if (parsedData == null || parsedReviewerData == null) {
-          throw const DataFormatFailureException();
-        }
-
-        final reviewer = User(
-          userId: parsedReviewerData.id,
-          name: parsedReviewerData.name,
-        );
-
-        final movieReview = MovieReview(
-          reviewId: parsedData.id,
-          title: parsedData.title,
-          body: parsedData.body,
-          rating: parsedData.rating,
-          reviewer: reviewer,
-        );
-
-        return movieReview;
-      },
-      (_, __) => const DataFormatFailureException(),
-    );
-  }
-
   static Either<DataFormatFailureException, String> parseCurrentUserId(
       Map<String, dynamic> data) {
     return Either.tryCatch(
@@ -303,9 +265,6 @@ class _MovieDataSourceParser {
         final parsedData = Query$GetMovieDetails.fromJson(data).movieById;
         if (parsedData == null) throw const DataFormatFailureException();
 
-        final reviews = _getMovieReviewListFromMovieDetails(
-            parsedData.movieReviewsByMovieId);
-
         final directorData = parsedData.movieDirectorByMovieDirectorId;
         final directorId = directorData?.id;
         final director = (directorId != null)
@@ -317,7 +276,6 @@ class _MovieDataSourceParser {
           title: parsedData.title,
           imgUrl: parsedData.imgUrl,
           releaseDate: parsedData.releaseDate,
-          reviews: reviews,
           director: director,
         );
 
@@ -337,27 +295,6 @@ class _MovieDataSourceParser {
         nodes.map((e) => e.rating).toNonNullable().toList();
 
     return ratings;
-  }
-
-  static List<MovieReview> _getMovieReviewListFromMovieDetails(
-      Query$GetMovieDetails$movieById$movieReviewsByMovieId? reviewList) {
-    if (reviewList == null) return [];
-
-    final reviews = reviewList.nodes.map((e) {
-      final reviewer = e.userByUserReviewerId;
-      final reviewerId = reviewer?.id;
-      return MovieReview(
-        reviewId: e.id,
-        title: e.title,
-        body: e.body,
-        rating: e.rating,
-        reviewer: (reviewerId != null)
-            ? User(userId: reviewerId, name: reviewer?.name)
-            : null,
-      );
-    }).toList();
-
-    return reviews;
   }
 }
 
