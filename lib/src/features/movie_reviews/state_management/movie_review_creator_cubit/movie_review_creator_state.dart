@@ -23,7 +23,7 @@ class MovieReviewCreatorLoaded extends MovieReviewCreatorState {
 }
 
 class MovieReviewCreatorFailed extends MovieReviewCreatorState {
-  final AppException exception;
+  final DomainException exception;
   const MovieReviewCreatorFailed(this.exception);
   @override
   List<Object> get props => [exception];

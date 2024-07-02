@@ -38,8 +38,8 @@ void main() {
         verifyNoMoreInteractions(movieRepository);
       }
 
-      When<Future<Either<DataException, MovieDetails>>> stubRepositoryCall() =>
-          when(() =>
+      When<Future<Either<DomainException, MovieDetails>>>
+          stubRepositoryCall() => when(() =>
               movieRepository.getMovieDetails(movieId: any(named: 'movieId')));
 
       void callGetMovieDetails() => movieDetailsCubit.getMovieDetails('');

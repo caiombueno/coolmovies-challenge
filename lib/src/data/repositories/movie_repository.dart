@@ -8,65 +8,65 @@ class MovieRepository {
   final MovieDataSource _movieDataSource;
   const MovieRepository(this._movieDataSource);
 
-  Future<Either<DataException, List<MovieSummary>>>
+  Future<Either<DomainException, List<MovieSummary>>>
       getMovieSummaryList() async {
     final result = await _movieDataSource.getMovieSummaryList();
     return result.fold(
       (exception) {
-        DataException dataException;
+        DomainException domainException;
 
         if (exception is EmptyResultException) {
-          dataException = const NoMovieSummaryListFoundException();
+          domainException = const NoMovieSummaryListFoundException();
         } else {
-          dataException = const MovieSummaryListFetchFailureException();
+          domainException = const MovieSummaryListFetchFailureException();
         }
 
-        return Left(dataException);
+        return Left(domainException);
       },
       (summaries) => Right(summaries),
     );
   }
 
-  Future<Either<DataException, MovieDetails>> getMovieDetails(
+  Future<Either<DomainException, MovieDetails>> getMovieDetails(
       {required MovieID movieId}) async {
     final result = await _movieDataSource.getMovieDetails(movieId: movieId);
     return result.fold(
       (exception) {
-        DataException dataException;
+        DomainException domainException;
 
         if (exception is EmptyResultException) {
-          dataException = const NoMovieDetailsFoundException();
+          domainException = const NoMovieDetailsFoundException();
         } else {
-          dataException = const MovieDetailsFetchFailureException();
+          domainException = const MovieDetailsFetchFailureException();
         }
 
-        return Left(dataException);
+        return Left(domainException);
       },
       (movieDetails) => Right(movieDetails),
     );
   }
 
-  Future<Either<DataException, MovieReviewList>> getMovieReviews(
+  Future<Either<DomainException, MovieReviewList>> getMovieReviews(
       {required MovieID movieId}) async {
     final result = await _movieDataSource.getMovieReviews(movieId: movieId);
 
     return result.fold(
       (exception) {
-        DataException dataException;
+        DomainException domainException;
 
         if (exception is EmptyResultException) {
-          dataException = const NoMovieReviewsFoundException();
+          domainException = const NoMovieReviewsFoundException();
         } else {
-          dataException = const MovieReviewsFetchFailureException();
+          domainException = const MovieReviewsFetchFailureException();
         }
 
-        return Left(dataException);
+        return Left(domainException);
       },
       (reviews) => Right(reviews),
     );
   }
 
-  Future<Either<AppException, Unit>> createMovieReview({
+  Future<Either<DomainException, Unit>> createMovieReview({
     required MovieID movieId,
     required String title,
     String? body,

@@ -1,44 +1,14 @@
 import 'package:coolmovies/src/l10n/l10n.dart';
+import 'package:coolmovies/src/models/exceptions/app_exception.dart';
 import 'package:flutter/material.dart';
 
-abstract class AppException implements Exception {
-  const AppException(this.code);
-
-  final String code;
+abstract class DomainException extends AppException {
+  const DomainException(String code) : super(code);
 
   String getMessage(BuildContext context);
 }
 
-abstract class DataException extends AppException {
-  const DataException(String code) : super(code);
-}
-
-class ServerCommunicationFailureException extends DataException {
-  const ServerCommunicationFailureException()
-      : super('server-communication-failure');
-
-  @override
-  String getMessage(BuildContext context) =>
-      context.l10n.serverCommunicationFailureExceptionMessage;
-}
-
-class EmptyResultException extends DataException {
-  const EmptyResultException() : super('empty-result');
-
-  @override
-  String getMessage(BuildContext context) =>
-      context.l10n.emptyResultExceptionMessage;
-}
-
-class DataFormatFailureException extends DataException {
-  const DataFormatFailureException() : super('data-format-failure');
-
-  @override
-  String getMessage(BuildContext context) =>
-      context.l10n.dataFormatFailureExceptionMessage;
-}
-
-class NoMovieSummaryListFoundException extends DataException {
+class NoMovieSummaryListFoundException extends DomainException {
   const NoMovieSummaryListFoundException()
       : super('no-movie-summary-list-found');
 
@@ -47,7 +17,7 @@ class NoMovieSummaryListFoundException extends DataException {
       context.l10n.noMovieSummaryListFoundExceptionMessage;
 }
 
-class MovieSummaryListFetchFailureException extends DataException {
+class MovieSummaryListFetchFailureException extends DomainException {
   const MovieSummaryListFetchFailureException()
       : super('movie-summary-list-fetch-failure');
 
@@ -56,7 +26,7 @@ class MovieSummaryListFetchFailureException extends DataException {
       context.l10n.movieSummaryListFetchFailureExceptionMessage;
 }
 
-class NoMovieDetailsFoundException extends DataException {
+class NoMovieDetailsFoundException extends DomainException {
   const NoMovieDetailsFoundException() : super('no-movie-details-found');
 
   @override
@@ -64,7 +34,7 @@ class NoMovieDetailsFoundException extends DataException {
       context.l10n.noMovieDetailsFoundExceptionMessage;
 }
 
-class MovieDetailsFetchFailureException extends DataException {
+class MovieDetailsFetchFailureException extends DomainException {
   const MovieDetailsFetchFailureException()
       : super('movie-details-fetch-failure');
 
@@ -73,7 +43,7 @@ class MovieDetailsFetchFailureException extends DataException {
       context.l10n.movieDetailsFetchFailureExceptionMessage;
 }
 
-class NoMovieReviewsFoundException extends DataException {
+class NoMovieReviewsFoundException extends DomainException {
   const NoMovieReviewsFoundException() : super('no-movie-reviews-found');
 
   @override
@@ -81,7 +51,7 @@ class NoMovieReviewsFoundException extends DataException {
       context.l10n.noMovieReviewsFoundExceptionMessage;
 }
 
-class MovieReviewsFetchFailureException extends DataException {
+class MovieReviewsFetchFailureException extends DomainException {
   const MovieReviewsFetchFailureException()
       : super('movie-reviews-fetch-failure');
 
@@ -90,7 +60,7 @@ class MovieReviewsFetchFailureException extends DataException {
       context.l10n.movieReviewsFetchFailureExceptionMessage;
 }
 
-class MovieReviewCreationFailureException extends DataException {
+class MovieReviewCreationFailureException extends DomainException {
   const MovieReviewCreationFailureException()
       : super('movie-review-creation-failure');
 

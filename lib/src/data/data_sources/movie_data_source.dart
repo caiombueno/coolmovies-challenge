@@ -47,7 +47,7 @@ class MovieDataSource {
         (exception) => throw exception,
         (summaries) => Either.right(summaries),
       );
-    } on AppException catch (e) {
+    } on DataException catch (e) {
       return Either.left(e);
     } catch (e) {
       return Either.left(Exception(e.toString()));
@@ -79,7 +79,7 @@ class MovieDataSource {
         (exception) => throw exception,
         (movieDetails) => Either.right(movieDetails),
       );
-    } on AppException catch (e) {
+    } on DataException catch (e) {
       return Either.left(e);
     } catch (e) {
       return Either.left(Exception(e.toString()));
@@ -112,7 +112,7 @@ class MovieDataSource {
         (exception) => throw exception,
         (reviewList) => Either.right(reviewList),
       );
-    } on AppException catch (e) {
+    } on DataException catch (e) {
       return Either.left(e);
     } catch (e) {
       return Either.left(Exception(e.toString()));
@@ -138,7 +138,7 @@ class MovieDataSource {
         (exception) => throw exception,
         (currentUser) => Either.right(currentUser),
       );
-    } on AppException catch (e) {
+    } on DataException catch (e) {
       return Either.left(e);
     } catch (e) {
       return Either.left(Exception(e.toString()));
@@ -182,7 +182,7 @@ class MovieDataSource {
       if (data == null || data.isEmpty) throw const EmptyResultException();
 
       return Either.right(unit);
-    } on AppException catch (e) {
+    } on DataException catch (e) {
       return Either.left(e);
     } catch (e) {
       return Either.left(Exception(e.toString()));

@@ -38,7 +38,8 @@ void main() {
         final result = await movieRepository.getMovieSummaryList();
 
         // assert
-        expectRight<DataException, List<MovieSummary>>(result, movieSummaries);
+        expectRight<DomainException, List<MovieSummary>>(
+            result, movieSummaries);
         verifySingleCallAndNoMoreInteractions();
       });
 
@@ -54,7 +55,7 @@ void main() {
         final result = await movieRepository.getMovieSummaryList();
 
         // assert
-        expectLeft<DataException, List<MovieSummary>,
+        expectLeft<DomainException, List<MovieSummary>,
             NoMovieSummaryListFoundException>(result);
         verifySingleCallAndNoMoreInteractions();
       });
@@ -71,7 +72,7 @@ void main() {
         final result = await movieRepository.getMovieSummaryList();
 
         // assert
-        expectLeft<DataException, List<MovieSummary>,
+        expectLeft<DomainException, List<MovieSummary>,
             MovieSummaryListFetchFailureException>(result);
         verifySingleCallAndNoMoreInteractions();
       });
@@ -89,7 +90,7 @@ void main() {
           when(() =>
               movieDataSource.getMovieDetails(movieId: any(named: 'movieId')));
 
-      Future<Either<DataException, MovieDetails>> getMovieDetails() =>
+      Future<Either<DomainException, MovieDetails>> getMovieDetails() =>
           movieRepository.getMovieDetails(movieId: '');
 
       test('should return MovieDetails when data source call is successful',
@@ -102,7 +103,7 @@ void main() {
         final result = await getMovieDetails();
 
         // assert
-        expectRight<DataException, MovieDetails>(result, movieDetails);
+        expectRight<DomainException, MovieDetails>(result, movieDetails);
         verifySingleCallAndNoMoreInteractions();
       });
 
@@ -117,7 +118,7 @@ void main() {
         final result = await getMovieDetails();
 
         // assert
-        expectLeft<DataException, MovieDetails, NoMovieDetailsFoundException>(
+        expectLeft<DomainException, MovieDetails, NoMovieDetailsFoundException>(
             result);
         verifySingleCallAndNoMoreInteractions();
       });
@@ -132,7 +133,7 @@ void main() {
         final result = await getMovieDetails();
 
         // assert
-        expectLeft<DataException, MovieDetails,
+        expectLeft<DomainException, MovieDetails,
             MovieDetailsFetchFailureException>(result);
         verifySingleCallAndNoMoreInteractions();
       });
@@ -150,7 +151,7 @@ void main() {
           when(() =>
               movieDataSource.getMovieReviews(movieId: any(named: 'movieId')));
 
-      Future<Either<DataException, MovieReviewList>> getMovieReviews() =>
+      Future<Either<DomainException, MovieReviewList>> getMovieReviews() =>
           movieRepository.getMovieReviews(movieId: '');
 
       test('should return MovieReviewList when data source call is successful',
@@ -161,7 +162,7 @@ void main() {
         // act
         final result = await getMovieReviews();
         // assert
-        expectRight<DataException, MovieReviewList>(result, movieReviews);
+        expectRight<DomainException, MovieReviewList>(result, movieReviews);
         verifySingleCallAndNoMoreInteractions();
       });
       test(
@@ -174,7 +175,7 @@ void main() {
         // act
         final result = await getMovieReviews();
         // assert
-        expectLeft<DataException, MovieReviewList,
+        expectLeft<DomainException, MovieReviewList,
             NoMovieReviewsFoundException>(result);
         verifySingleCallAndNoMoreInteractions();
       });
@@ -186,7 +187,7 @@ void main() {
         // act
         final result = await getMovieReviews();
         // assert
-        expectLeft<DataException, MovieReviewList,
+        expectLeft<DomainException, MovieReviewList,
             MovieReviewsFetchFailureException>(result);
         verifySingleCallAndNoMoreInteractions();
       });
@@ -211,7 +212,7 @@ void main() {
                 rating: any(named: 'rating'),
               ));
 
-      Future<Either<AppException, Unit>> createMovieReview() =>
+      Future<Either<DomainException, Unit>> createMovieReview() =>
           movieRepository.createMovieReview(
             movieId: 'movieId',
             title: 'Test Review',
@@ -223,7 +224,7 @@ void main() {
         // act
         final result = await createMovieReview();
         // assert
-        expectRight<AppException, Unit>(result, unit);
+        expectRight<DomainException, Unit>(result, unit);
         verifySingleCallAndNoMoreInteractions();
       });
 
@@ -235,7 +236,7 @@ void main() {
         // act
         final result = await createMovieReview();
         // assert
-        expectLeft<AppException, Unit, MovieReviewCreationFailureException>(
+        expectLeft<DomainException, Unit, MovieReviewCreationFailureException>(
             result);
         verifySingleCallAndNoMoreInteractions();
       });

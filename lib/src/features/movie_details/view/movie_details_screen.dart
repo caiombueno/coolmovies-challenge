@@ -43,7 +43,7 @@ class _MovieDetailsScreen extends StatelessWidget {
 
 class _MovieDetailsFailedView extends StatelessWidget {
   const _MovieDetailsFailedView(this.exception);
-  final AppException exception;
+  final DomainException exception;
 
   @override
   Widget build(BuildContext context) {

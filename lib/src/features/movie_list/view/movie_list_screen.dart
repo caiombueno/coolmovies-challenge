@@ -62,7 +62,7 @@ class _MovieListScreenAppBar extends StatelessWidget
 
 class _MovieListFailedWidget extends StatelessWidget {
   const _MovieListFailedWidget(this.exception);
-  final AppException exception;
+  final DomainException exception;
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:coolmovies/src/data/data.dart';
 import 'package:coolmovies/src/features/movie_reviews/state_management/state_management.dart';
-import 'package:coolmovies/src/models/exceptions.dart';
+import 'package:coolmovies/src/models/exceptions/exceptions.dart';
 import 'package:coolmovies/src/models/models.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
@@ -37,7 +37,7 @@ void main() {
         verifyNoMoreInteractions(movieRepository);
       }
 
-      When<Future<Either<AppException, Unit>>> stubRepositoryCall() =>
+      When<Future<Either<DomainException, Unit>>> stubRepositoryCall() =>
           when(() => movieRepository.createMovieReview(
               movieId: any(named: 'movieId'),
               title: any(named: 'title'),

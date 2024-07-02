@@ -21,7 +21,7 @@ class MovieDetailsLoaded extends MovieDetailsState {
 }
 
 class MovieDetailsFailed extends MovieDetailsState {
-  final AppException exception;
+  final DomainException exception;
 
   const MovieDetailsFailed(this.exception);
 

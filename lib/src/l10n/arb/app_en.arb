@@ -1,10 +1,6 @@
 {
   "@@locale": "en",
   "appName": "CoolMovies",
-  "serverCommunicationFailureExceptionMessage": "Error occurred while communicating with the server.",
-
-  "emptyResultExceptionMessage": "No data found.",
-  "dataFormatFailureExceptionMessage": "Error occurred while processing the data.",
   "noMovieSummaryListFoundExceptionMessage": "No movies found.",
   "movieSummaryListFetchFailureExceptionMessage": "Failed to fetch movies.",
   "noMovieDetailsFoundExceptionMessage": "Couldn't find details about the movie.",

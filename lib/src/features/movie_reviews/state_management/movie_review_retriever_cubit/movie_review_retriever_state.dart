@@ -18,7 +18,7 @@ class MovieReviewsRetrieverLoaded extends MovieReviewRetrieverState {
 }
 
 class MovieReviewsRetrieverFailed extends MovieReviewRetrieverState {
-  final AppException exception;
+  final DomainException exception;
   const MovieReviewsRetrieverFailed(this.exception);
   @override
   List<Object> get props => [exception];

@@ -37,7 +37,7 @@ void main() {
         verifyNoMoreInteractions(movieRepository);
       }
 
-      When<Future<Either<DataException, MovieReviewList>>>
+      When<Future<Either<DomainException, MovieReviewList>>>
           stubRepositoryCall() => when(() =>
               movieRepository.getMovieReviews(movieId: any(named: 'movieId')));
 
