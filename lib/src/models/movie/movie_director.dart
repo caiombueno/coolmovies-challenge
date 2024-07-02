@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
 
+typedef DirectorID = String;
+
 class MovieDirector extends Equatable {
-  final String directorId;
+  final DirectorID directorId;
   final String? name;
 
   const MovieDirector({

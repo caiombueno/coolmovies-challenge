@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 
 class MovieDetails extends Equatable {
-  final String movieId;
+  final MovieID movieId;
   final String? title, imgUrl, releaseDate;
   final List<MovieReview> reviews;
   final MovieDirector? director;

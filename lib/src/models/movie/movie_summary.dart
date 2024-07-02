@@ -1,7 +1,9 @@
+import 'package:coolmovies/src/models/models.dart';
 import 'package:equatable/equatable.dart';
+import 'dart:math' as math;
 
 class MovieSummary extends Equatable {
-  final String id;
+  final MovieID id;
   final String? title, imgUrl;
   final double overallRating;
 
@@ -19,11 +21,12 @@ class MovieSummary extends Equatable {
     required List<double> ratingList,
   }) {
     final overallRating = ratingList.mean ?? 0;
+    final overallRatingRounded = overallRating.roundToDecimalPlaces(1);
     return MovieSummary(
       id: id,
       title: title,
       imgUrl: imgUrl,
-      overallRating: overallRating,
+      overallRating: overallRatingRounded,
     );
   }
 
@@ -36,5 +39,12 @@ extension on Iterable<double> {
     if (isEmpty) return null;
 
     return reduce((a, b) => a + b) / length;
+  }
+}
+
+extension on double {
+  double roundToDecimalPlaces(int decimalPlaces) {
+    final mod = math.pow(10, decimalPlaces);
+    return ((this * mod).round() / mod);
   }
 }

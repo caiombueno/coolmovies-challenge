@@ -1,8 +1,10 @@
 import 'package:coolmovies/src/models/models.dart';
 import 'package:equatable/equatable.dart';
 
+typedef ReviewID = String;
+
 class MovieReview extends Equatable {
-  final String reviewId;
+  final ReviewID reviewId;
   final String? title, body;
   final double? rating;
   final User? reviewer;
@@ -17,17 +19,4 @@ class MovieReview extends Equatable {
 
   @override
   List<Object?> get props => [reviewId, title, body, reviewer, rating];
-}
-
-class MovieReviewList extends Equatable {
-  final String movieId;
-  final List<MovieReview> reviews;
-
-  const MovieReviewList({
-    required this.movieId,
-    this.reviews = const [],
-  });
-
-  @override
-  List<Object?> get props => [movieId, reviews];
 }

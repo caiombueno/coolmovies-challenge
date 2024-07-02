@@ -28,7 +28,7 @@ class MovieRepository {
   }
 
   Future<Either<DataException, MovieDetails>> getMovieDetails(
-      {required String movieId}) async {
+      {required MovieID movieId}) async {
     final result = await _movieDataSource.getMovieDetails(movieId: movieId);
     return result.fold(
       (exception) {
@@ -47,7 +47,7 @@ class MovieRepository {
   }
 
   Future<Either<DataException, MovieReviewList>> getMovieReviews(
-      {required String movieId}) async {
+      {required MovieID movieId}) async {
     final result = await _movieDataSource.getMovieReviews(movieId: movieId);
 
     return result.fold(

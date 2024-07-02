@@ -55,7 +55,7 @@ class MovieDataSource {
   }
 
   Future<Either<Exception, MovieDetails>> getMovieDetails(
-      {required String movieId}) async {
+      {required MovieID movieId}) async {
     try {
       final result = await _client
           .query$GetMovieDetails(
@@ -87,11 +87,12 @@ class MovieDataSource {
   }
 
   Future<Either<Exception, MovieReviewList>> getMovieReviews(
-      {required String movieId}) async {
+      {required MovieID movieId}) async {
     try {
       final result = await _client
           .query$GetMovieReviews(
             Options$Query$GetMovieReviews(
+                fetchPolicy: FetchPolicy.networkOnly,
                 variables: Variables$Query$GetMovieReviews(movieId: movieId)),
           )
           .onError(
