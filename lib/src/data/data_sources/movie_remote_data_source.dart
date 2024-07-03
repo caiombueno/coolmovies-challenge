@@ -6,17 +6,21 @@ import 'package:fpdart/fpdart.dart';
 import 'package:graphql/client.dart';
 import 'package:injectable/injectable.dart';
 
-@lazySingleton
-class MovieDataSource {
+@LazySingleton(env: [Environment.prod])
+class MovieRemoteDataSource {
   late final GraphQLClient _client;
 
-  MovieDataSource() {
+  MovieRemoteDataSource() {
     final httpLink = HttpLink(
       Platform.isAndroid
           ? 'http://10.0.2.2:5001/graphql'
           : 'http://localhost:5001/graphql',
     );
     _client = GraphQLClient(
+      defaultPolicies: DefaultPolicies(
+        query: Policies(fetch: FetchPolicy.cacheAndNetwork),
+        mutate: Policies(fetch: FetchPolicy.cacheAndNetwork),
+      ),
       link: httpLink,
       cache: GraphQLCache(store: InMemoryStore()),
     );
@@ -24,7 +28,7 @@ class MovieDataSource {
 
   // This is only used for testing purposes.
   // Injectable will try to inject a GraphQLClient singleton if parameters are used in the constructor.
-  MovieDataSource.forTesting(GraphQLClient client) : _client = client;
+  MovieRemoteDataSource.forTesting(GraphQLClient client) : _client = client;
 
   Future<Either<Exception, List<MovieSummary>>> getMovieSummaryList() async {
     try {
@@ -87,12 +91,14 @@ class MovieDataSource {
   }
 
   Future<Either<Exception, MovieReviewList>> getMovieReviews(
-      {required MovieID movieId}) async {
+      {required MovieID movieId, bool forceRefresh = false}) async {
     try {
       final result = await _client
           .query$GetMovieReviews(
             Options$Query$GetMovieReviews(
-                fetchPolicy: FetchPolicy.networkOnly,
+                fetchPolicy: (forceRefresh)
+                    ? FetchPolicy.networkOnly
+                    : FetchPolicy.cacheAndNetwork,
                 variables: Variables$Query$GetMovieReviews(movieId: movieId)),
           )
           .onError(
