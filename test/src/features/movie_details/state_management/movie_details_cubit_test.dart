@@ -42,7 +42,8 @@ void main() {
           stubRepositoryCall() => when(() =>
               movieRepository.getMovieDetails(movieId: any(named: 'movieId')));
 
-      void callGetMovieDetails() => movieDetailsCubit.getMovieDetails('');
+      void callGetMovieDetails() =>
+          movieDetailsCubit.getMovieDetails(movieId: '');
 
       blocTest<MovieDetailsCubit, MovieDetailsState>(
           'emits [MovieDetailsLoaded] when getMovieDetails succeeds',

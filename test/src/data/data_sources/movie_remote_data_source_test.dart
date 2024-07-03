@@ -9,13 +9,13 @@ import '../../../mocks.dart';
 import '../../../utils/utils.dart';
 
 void main() {
-  group('MovieDataSource', () {
-    late final MovieDataSource dataSource;
+  group('MovieRemoteDataSource', () {
+    late final MovieRemoteDataSource dataSource;
     late final GraphQLClient graphQlClient;
 
     setUpAll(() {
       graphQlClient = MockGraphQLClient();
-      dataSource = MovieDataSource.forTesting(graphQlClient);
+      dataSource = MovieRemoteDataSource.forTesting(graphQlClient);
     });
 
     Future<QueryResult<Q>> makeQuery<Q>() => graphQlClient.query(any());

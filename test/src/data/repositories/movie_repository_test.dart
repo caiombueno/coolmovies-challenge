@@ -8,7 +8,7 @@ import '../../../utils/utils.dart';
 
 void main() {
   group('MovieRepository', () {
-    late final MovieDataSource movieDataSource;
+    late final MovieRemoteDataSource movieDataSource;
     late final MovieRepository movieRepository;
 
     setUpAll(() {
