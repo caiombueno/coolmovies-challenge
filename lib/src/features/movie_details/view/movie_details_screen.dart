@@ -1,7 +1,8 @@
-import 'package:coolmovies/src/data/repositories/repositories.dart';
+import 'package:coolmovies/src/data/data.dart';
+import 'package:coolmovies/src/features/commons/components/exception_failure_indicator.dart';
 import 'package:coolmovies/src/features/movie_details/state_management/state_management.dart';
-import 'package:coolmovies/src/features/movie_details/view/components/movie_details_loaded/movie_details_loaded.dart';
-import 'package:coolmovies/src/models/models.dart';
+import 'package:coolmovies/src/features/movie_details/view/components/components.dart';
+import 'package:coolmovies/src/features/movie_reviews/state_management/state_management.dart';
 import 'package:coolmovies/src/service_location/service_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,45 +13,45 @@ class MovieDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<MovieDetailsCubit>(
-      create: (_) => MovieDetailsCubit(serviceLocator<MovieRepository>())
-        ..getMovieDetails(movieId),
-      child: const _MovieDetailsScreen(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<MovieDetailsCubit>(
+          create: (_) => MovieDetailsCubit(serviceLocator<MovieRepository>())
+            ..getMovieDetails(movieId: movieId),
+        ),
+        BlocProvider<MovieReviewRetrieverCubit>(
+          create: (_) =>
+              MovieReviewRetrieverCubit(serviceLocator<MovieRepository>())
+                ..getMovieReviews(movieId: movieId),
+        ),
+      ],
+      child: const MovieDetailsView(),
     );
   }
 }
 
-class _MovieDetailsScreen extends StatelessWidget {
-  const _MovieDetailsScreen();
+class MovieDetailsView extends StatelessWidget {
+  const MovieDetailsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
-      builder: ((context, state) {
-        if (state is MovieDetailsLoaded) {
-          return MovieDetailsLoadedView(state.movieDetails);
-        } else if (state is MovieDetailsFailed) {
-          return _MovieDetailsFailedView(state.exception);
-        } else {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-      }),
-    );
-  }
-}
-
-class _MovieDetailsFailedView extends StatelessWidget {
-  const _MovieDetailsFailedView(this.exception);
-  final DomainException exception;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(),
-      body: Center(child: Text(exception.getMessage(context))),
+    return SafeArea(
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(elevation: 0, backgroundColor: Colors.transparent),
+        body: Center(
+          child: BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
+              builder: (_, state) {
+            if (state is MovieDetailsLoaded) {
+              return MovieDetailsContentView(state.movieDetails);
+            } else if (state is MovieDetailsFailed) {
+              return ExceptionFailureIndicator(state.exception);
+            } else {
+              return const CircularProgressIndicator();
+            }
+          }),
+        ),
+      ),
     );
   }
 }
