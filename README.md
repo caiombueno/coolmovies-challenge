@@ -1,35 +1,30 @@
-# Coolmovies mobile challenge
+Hello! This is my submission for the Coolmovies mobile challenge. You can find the original repository [here](https://gitlab.ecoportal.co.nz/ecoportal/coolmovies#mobile-version-challenge). I hope you like it.
 
-You have to add the cool movies review feature to the existing `coolmovies-mobile`.
+### Main Technologies
 
-This folder contains a basic Flutter application with some example callbacks.
+The main technologies used are:
 
-We've setup GraphQL for you with the [`graphql_flutter`](https://pub.dev/packages/graphql_flutter) package. We recommend that you work on an emulator only, there's no need to test your application in a real device. Please use the [`flutter_bloc`](https://pub.dev/packages/flutter_bloc) package for state management.
+- State management: Bloc/Cubit
+- Navigation: GoRouter
+- Service location: GetIt
+- GraphQL client: graphql
 
-## Acceptance Criteria
+### Video Demo
 
-**You will be evaluated on your UI/UX as we believe this is an important skill to have.**
+https://github.com/caiombueno/coolmovies-challenge/assets/25569107/357f5adc-022f-4de1-a9d4-547faaba9015
 
-**You also will be evaluated based on your architectural choices.**
+### Functional Requirements Accomplished
 
-**We suggest that you submit the assessment not later than a week span.**
+I have accomplished the following requirements from the acceptance criteria:
 
-**DO NOT USE EXISTING TEMPLATES. You can copy the design but not the code, we have to evaluate you by your coding skills.**
+1. List all available movies, showing at least the title.
+2. Tapping on a movie opens a view page presenting all the available information to the user.
+3. Each movie page displays all its reviews.
+4. Each review includes at least: title, body, and stars (1-5).
+5. The user can create new reviews.
+6. The user can see the reviews and movies even when offline.
 
-For your solution to be accepted it is required that your application is able to:
+You can see a demonstration of the sixth feature below:
 
-1. List all the available movies, showing at least the title
-2. Tapping on a movie must open a view page presenting all the available information to the user
-3. Each movie page must display all its reviews
-4. Each review should consist of (at least): title, body and stars (1-5)
-5. The user should be able to create new reviews
+https://github.com/caiombueno/coolmovies-challenge/assets/25569107/9c840687-ea23-40a4-a25e-303f40d6a36f
 
-## Plus
-Consider adding the features below if you feel confortable and have the time
-
-- user should be able to see the reviews and the movies even if offline
-- user should be able to create reviews offline and sync them when online
-
-Anything else is up to you (animations, assets, 3rd party dependencies, etc). We will consider all your additions so don't stick to the minimum!
-
-Good luck!
