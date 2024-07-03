@@ -10,8 +10,10 @@ class MovieReviewRetrieverCubit extends Cubit<MovieReviewRetrieverState> {
   MovieReviewRetrieverCubit(this._movieRepository)
       : super(const MovieReviewsRetrieverLoading());
 
-  Future<void> getMovieReviews({required String movieId}) async {
-    final result = await _movieRepository.getMovieReviews(movieId: movieId);
+  Future<void> getMovieReviews(
+      {required String movieId, bool forceRefresh = false}) async {
+    final result = await _movieRepository.getMovieReviews(
+        movieId: movieId, forceRefresh: forceRefresh);
 
     emit(result.fold(
       (exception) => MovieReviewsRetrieverFailed(exception),
