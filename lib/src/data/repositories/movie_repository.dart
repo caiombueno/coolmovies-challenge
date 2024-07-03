@@ -3,9 +3,9 @@ import 'package:coolmovies/src/models/models.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 
-@lazySingleton
+@LazySingleton(env: [Environment.prod])
 class MovieRepository {
-  final MovieDataSource _movieDataSource;
+  final MovieRemoteDataSource _movieDataSource;
   const MovieRepository(this._movieDataSource);
 
   Future<Either<DomainException, List<MovieSummary>>>
@@ -47,8 +47,9 @@ class MovieRepository {
   }
 
   Future<Either<DomainException, MovieReviewList>> getMovieReviews(
-      {required MovieID movieId}) async {
-    final result = await _movieDataSource.getMovieReviews(movieId: movieId);
+      {required MovieID movieId, bool forceRefresh = false}) async {
+    final result = await _movieDataSource.getMovieReviews(
+        movieId: movieId, forceRefresh: forceRefresh);
 
     return result.fold(
       (exception) {

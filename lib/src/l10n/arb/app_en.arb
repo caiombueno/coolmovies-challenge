@@ -26,5 +26,11 @@
   "addReviewButtonLabel": "Add Review",
   "noMovieReviewsFoundExceptionMessage": "No reviews found.",
   "movieReviewsFetchFailureExceptionMessage": "Failed to fetch movie reviews.",
-  "movieReviewCreationFailureExceptionMessage": "Failed to create movie review."
+  "movieReviewCreationFailureExceptionMessage": "Failed to create movie review.",
+  "movieReviewCreationSuccessMessage": "Review created successfully.",
+  "movieReviewFormTitle": "Avaliate this movie.",
+  "movieReviewFormTitleInputLabel": "Title",
+  "movieReviewFormBodyInputLabel": "Commment (optional)",
+  "movieReviewFormSubmitButtonLabel": "Send",
+  "movieReviewFormNullTitleWarningMessage": "Please enter a title."
 }
