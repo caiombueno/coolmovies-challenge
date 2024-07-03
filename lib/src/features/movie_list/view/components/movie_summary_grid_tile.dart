@@ -1,5 +1,5 @@
 import 'package:coolmovies/src/constants/app_sizes.dart';
-import 'package:coolmovies/src/features/commons/views/movie_image.dart';
+import 'package:coolmovies/src/features/commons/components/dynamic_cached_network_image.dart';
 import 'package:coolmovies/src/models/models.dart';
 import 'package:coolmovies/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
@@ -14,23 +14,14 @@ class MovieSummaryGridTile extends StatelessWidget {
     final overallRating = movieSummary.overallRating;
     final imageUrl = movieSummary.imgUrl;
 
-    final decoration = BoxDecoration(
-      borderRadius: BorderRadius.circular(Sizes.p4),
-      // color: Colors.white,
-      border: Border.all(width: 0.5, color: Colors.white),
-    );
-
-    final footer = _GridTileFooter(
+    final footer = _MovieSummaryInfo(
       title: title,
       overallRating: overallRating,
     );
 
     return GestureDetector(
       onTap: () => MovieDetailsRoute(movieSummary.id).push(context),
-      child: Container(
-        decoration: decoration,
-        margin: const EdgeInsets.all(Sizes.p8),
-        padding: const EdgeInsets.all(Sizes.p8),
+      child: _MovieSummaryGridTileContainer(
         child: _CustomGridTile(
           footer: footer,
           child: (imageUrl != null) ? _MovieImage(imageUrl: imageUrl) : null,
@@ -40,8 +31,28 @@ class MovieSummaryGridTile extends StatelessWidget {
   }
 }
 
-class _GridTileFooter extends StatelessWidget {
-  const _GridTileFooter({
+class _MovieSummaryGridTileContainer extends StatelessWidget {
+  const _MovieSummaryGridTileContainer({Widget? child}) : _child = child;
+  final Widget? _child;
+
+  @override
+  Widget build(BuildContext context) {
+    final decoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(Sizes.p4),
+      border: Border.all(width: 0.5, color: Colors.white),
+    );
+
+    return Container(
+      decoration: decoration,
+      margin: const EdgeInsets.all(Sizes.p8),
+      padding: const EdgeInsets.all(Sizes.p8),
+      child: _child,
+    );
+  }
+}
+
+class _MovieSummaryInfo extends StatelessWidget {
+  const _MovieSummaryInfo({
     required this.title,
     required this.overallRating,
   });
@@ -105,10 +116,7 @@ class _RatingIndicator extends StatelessWidget {
 
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: [
-        starIcon,
-        ratingText,
-      ],
+      children: [starIcon, ratingText],
     );
   }
 }
@@ -144,12 +152,15 @@ class _MovieImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MovieImage(
+    return DynamicCachedNetworkImage(
       imageUrl: imageUrl,
-      imageBuilder: (context, imageProvider) => Container(
+      imageBuilder: (_, imageProvider) => Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Sizes.p4),
-          image: DecorationImage(image: imageProvider, fit: BoxFit.fitHeight),
+          image: DecorationImage(
+            image: imageProvider,
+            fit: BoxFit.fitHeight,
+          ),
         ),
       ),
       fit: BoxFit.cover,

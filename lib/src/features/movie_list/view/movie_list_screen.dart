@@ -1,9 +1,8 @@
-import 'package:coolmovies/src/constants/app_sizes.dart';
 import 'package:coolmovies/src/data/data.dart';
+import 'package:coolmovies/src/features/commons/components/exception_failure_indicator.dart';
 import 'package:coolmovies/src/features/movie_list/state_management/state_management.dart';
-import 'package:coolmovies/src/features/movie_list/view/components/movie_list_loaded/movie_list_loaded.dart';
+import 'package:coolmovies/src/features/movie_list/view/components/components.dart';
 import 'package:coolmovies/src/l10n/l10n.dart';
-import 'package:coolmovies/src/models/models.dart';
 import 'package:coolmovies/src/service_location/service_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,58 +13,36 @@ class MovieListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MovieListCubit>(
-      create: (_) => MovieListCubit(serviceLocator.get<MovieRepository>())
+      create: (_) => MovieListCubit(serviceLocator<MovieRepository>())
         ..getMovieSummaryList(),
-      child: const _MovieListScreen(),
+      child: const MovieListView(),
     );
   }
 }
 
-class _MovieListScreen extends StatelessWidget {
-  const _MovieListScreen();
+class MovieListView extends StatelessWidget {
+  const MovieListView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final blocBuilder =
-        BlocBuilder<MovieListCubit, MovieListState>(builder: ((context, state) {
-      if (state is MovieListLoaded) {
-        return MovieListLoadedView(state.movies);
-      } else if (state is MovieListFailed) {
-        return _MovieListFailedWidget(state.exception);
-      } else {
-        return const CircularProgressIndicator();
-      }
-    }));
-
     return Scaffold(
-      appBar: const _MovieListScreenAppBar(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Sizes.p16),
-        child: Center(child: blocBuilder),
+      appBar: AppBar(title: Text(context.l10n.appName)),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 0),
+          child: Center(child: BlocBuilder<MovieListCubit, MovieListState>(
+            builder: ((context, state) {
+              if (state is MovieListLoaded) {
+                return MovieSummaryGridView(state.movies);
+              } else if (state is MovieListFailed) {
+                return ExceptionFailureIndicator(state.exception);
+              } else {
+                return const CircularProgressIndicator();
+              }
+            }),
+          )),
+        ),
       ),
     );
-  }
-}
-
-class _MovieListScreenAppBar extends StatelessWidget
-    implements PreferredSizeWidget {
-  const _MovieListScreenAppBar();
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(title: Text(context.l10n.appName));
-  }
-}
-
-class _MovieListFailedWidget extends StatelessWidget {
-  const _MovieListFailedWidget(this.exception);
-  final DomainException exception;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(exception.getMessage(context));
   }
 }
