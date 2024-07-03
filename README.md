@@ -26,5 +26,4 @@ I have accomplished the following requirements from the acceptance criteria:
 
 You can see a demonstration of the sixth feature below:
 
-https://github.com/caiombueno/coolmovies-challenge/assets/25569107/9c840687-ea23-40a4-a25e-303f40d6a36f
-
+https://github.com/caiombueno/coolmovies-challenge/assets/25569107/a87d7bab-51a0-47c4-9a28-1d9dc0f185fb
