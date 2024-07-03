@@ -1,4 +1,5 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: type=lint
+// coverage:ignore-file
 
 import 'dart:async';
 import 'package:gql/ast.dart';

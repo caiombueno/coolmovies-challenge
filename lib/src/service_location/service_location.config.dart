@@ -19,18 +19,19 @@ const String _prod = 'prod';
 
 extension GetItInjectableX on _i1.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
-  _i1.GetIt init({
+  Future<_i1.GetIt> init({
     String? environment,
     _i2.EnvironmentFilter? environmentFilter,
-  }) {
+  }) async {
     final gh = _i2.GetItHelper(
       this,
       environment,
       environmentFilter,
     );
-    gh.lazySingleton<_i3.MovieRemoteDataSource>(
-      () => _i3.MovieRemoteDataSource(),
+    await gh.lazySingletonAsync<_i3.MovieRemoteDataSource>(
+      () => _i3.MovieRemoteDataSource.init(),
       registerFor: {_prod},
+      preResolve: true,
     );
     gh.lazySingleton<_i4.MovieRepository>(
       () => _i4.MovieRepository(gh<_i5.MovieRemoteDataSource>()),

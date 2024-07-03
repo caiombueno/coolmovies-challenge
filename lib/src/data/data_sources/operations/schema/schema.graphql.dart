@@ -1,3 +1,6 @@
+// ignore_for_file: type=lint
+// coverage:ignore-file
+
 class Input$CreateMovieReviewInput {
   factory Input$CreateMovieReviewInput({
     required String title,

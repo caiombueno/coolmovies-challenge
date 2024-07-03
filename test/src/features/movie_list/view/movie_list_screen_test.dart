@@ -39,7 +39,6 @@ void main() {
 
     testWidgets('uses provided key', (tester) async {
       // arrange
-
       final key = UniqueKey();
 
       // act

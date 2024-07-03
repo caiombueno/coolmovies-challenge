@@ -5,25 +5,42 @@ import 'package:coolmovies/src/models/models.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:graphql/client.dart';
 import 'package:injectable/injectable.dart';
+import 'package:path_provider/path_provider.dart';
 
 @LazySingleton(env: [Environment.prod])
 class MovieRemoteDataSource {
-  late final GraphQLClient _client;
+  final GraphQLClient _client;
 
-  MovieRemoteDataSource() {
+  MovieRemoteDataSource(this._client);
+
+  @FactoryMethod(preResolve: true)
+  static Future<MovieRemoteDataSource> init() async {
     final httpLink = HttpLink(
       Platform.isAndroid
           ? 'http://10.0.2.2:5001/graphql'
           : 'http://localhost:5001/graphql',
     );
-    _client = GraphQLClient(
+
+    final directory = await getApplicationDocumentsDirectory();
+
+    final hiveStore = await HiveStore.open(path: directory.path);
+
+    final client = GraphQLClient(
       defaultPolicies: DefaultPolicies(
-        query: Policies(fetch: FetchPolicy.cacheAndNetwork),
-        mutate: Policies(fetch: FetchPolicy.cacheAndNetwork),
+        query: Policies(
+          fetch: FetchPolicy.cacheAndNetwork,
+          error: ErrorPolicy.all,
+        ),
+        mutate: Policies(
+          fetch: FetchPolicy.cacheAndNetwork,
+          error: ErrorPolicy.all,
+        ),
       ),
       link: httpLink,
-      cache: GraphQLCache(store: InMemoryStore()),
+      cache: GraphQLCache(store: hiveStore),
     );
+
+    return MovieRemoteDataSource(client);
   }
 
   // This is only used for testing purposes.

@@ -6,5 +6,5 @@ import 'service_location.config.dart';
 final serviceLocator = GetIt.instance;
 
 @InjectableInit()
-void configureDependencies() =>
-    serviceLocator.init(environment: Environment.prod);
+Future<void> configureDependencies() async =>
+    await serviceLocator.init(environment: Environment.prod);

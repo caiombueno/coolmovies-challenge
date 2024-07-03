@@ -8,7 +8,7 @@ final testServiceLocator = GetIt.instance;
 @InjectableInit(
   initializerName: 'testInit',
   preferRelativeImports: true,
-  generateForDir: ['test', 'lib'],
+  generateForDir: ['test'],
 )
 void configureTestDependencies() =>
     testServiceLocator.testInit(environment: Environment.test);

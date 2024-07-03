@@ -30,7 +30,7 @@
   "movieReviewCreationSuccessMessage": "Review created successfully.",
   "movieReviewFormTitle": "Avaliate this movie.",
   "movieReviewFormTitleInputLabel": "Title",
-  "movieReviewFormBodyInputLabel": "Commment (optional)",
+  "movieReviewFormBodyInputLabel": "Comment (optional)",
   "movieReviewFormSubmitButtonLabel": "Send",
   "movieReviewFormNullTitleWarningMessage": "Please enter a title."
 }
