@@ -1,0 +1,65 @@
+type MovieDetails {
+  id: ID!
+  title: String
+  releaseDate: String
+  imgUrl: String
+  movieDirectorByMovieDirectorId: MovieDirector
+  movieReviewsByMovieId: MovieReviewConnection 
+}
+
+type MovieDirector {
+  id: ID!
+  name: String
+}
+
+type MovieReview {
+  id: ID!
+  title: String
+  body: String
+  rating: Float
+  userByUserReviewerId: User
+}
+
+type User {
+  id: ID!
+  name: String
+}
+
+type MovieReviewConnection {
+  nodes: [MovieReview!]!
+}
+
+type MovieSummary {
+  id: ID!
+  title: String
+  imgUrl: String
+  movieReviewsByMovieId: MovieReviewConnection
+}
+
+type MovieSummaryConnection {
+  nodes: [MovieSummary!]!
+}
+
+type Query {
+  allMovies: MovieSummaryConnection!
+  movieById(id: UUID!): MovieDetails
+  currentUser: User
+}
+
+type Mutation {
+  createMovieReview(input: CreateMovieReviewInput): CreateMovieReviewPayload
+}
+
+input CreateMovieReviewInput {
+  title: String!
+  body: String
+  rating: Int
+  movieId: UUID!
+  userReviewerId: UUID!
+}
+
+type CreateMovieReviewPayload {
+  movieReview: MovieReview
+}
+
+scalar UUID

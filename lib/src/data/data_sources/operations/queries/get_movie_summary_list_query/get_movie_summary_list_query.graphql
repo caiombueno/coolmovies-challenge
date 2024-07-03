@@ -1,0 +1,14 @@
+query GetMovieSummaryList {
+    allMovies {
+        nodes {
+            id
+            title
+            imgUrl
+						movieReviewsByMovieId{
+							nodes {
+								rating
+							}
+						}
+        }
+    }
+}

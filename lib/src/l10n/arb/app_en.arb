@@ -1,0 +1,36 @@
+{
+  "@@locale": "en",
+  "appName": "CoolMovies",
+  "noMovieSummaryListFoundExceptionMessage": "No movies found.",
+  "movieSummaryListFetchFailureExceptionMessage": "Failed to fetch movies.",
+  "noMovieDetailsFoundExceptionMessage": "Couldn't find details about the movie.",
+  "movieDetailsFetchFailureExceptionMessage": "Failed to fetch details about the movie.",
+  "movieImageErrorMessage": "Error loading image.",
+  "releaseDateIndicator": "Release date: {releaseDate}",
+  "@releaseDate": {
+    "placeholders": {
+      "releaseDate": {
+        "type": "String"
+      }
+    }
+  },
+  "directorNameIndicator": "Director: {directorName}",
+  "@directorName": {
+    "placeholders": {
+      "directorName": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewsSectionTitle": "Reviews",
+  "addReviewButtonLabel": "Add Review",
+  "noMovieReviewsFoundExceptionMessage": "No reviews found.",
+  "movieReviewsFetchFailureExceptionMessage": "Failed to fetch movie reviews.",
+  "movieReviewCreationFailureExceptionMessage": "Failed to create movie review.",
+  "movieReviewCreationSuccessMessage": "Review created successfully.",
+  "movieReviewFormTitle": "Avaliate this movie.",
+  "movieReviewFormTitleInputLabel": "Title",
+  "movieReviewFormBodyInputLabel": "Comment (optional)",
+  "movieReviewFormSubmitButtonLabel": "Send",
+  "movieReviewFormNullTitleWarningMessage": "Please enter a title."
+}
